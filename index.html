@@ -122,6 +122,44 @@
     .store-link::after { content: "↗"; font-size: 13px; }
     .meta { color: var(--muted); font-size: 12px; }
 
+    .melody-showcase { background: #ebe6dd; }
+    .showcase-shell {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(30px, 5vw, 58px);
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 90% 5%, rgba(135, 61, 255, .2), transparent 34%),
+        radial-gradient(circle at 5% 38%, rgba(24, 211, 218, .1), transparent 30%),
+        #050b18;
+      color: white;
+      box-shadow: 0 30px 70px rgba(21, 24, 31, .16);
+    }
+    .showcase-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 44px; }
+    .showcase-head h2 { max-width: 690px; }
+    .showcase-copy { max-width: 590px; margin: 20px 0 0; color: rgba(255,255,255,.66); font-size: 15px; line-height: 1.75; }
+    .showcase-shell .kicker { color: #ff8c7e; }
+    .showcase-shell .store-link { min-height: 44px; padding-inline: 16px; background: white; color: #10131b; white-space: nowrap; }
+    .showcase-shell .store-link:hover { background: #f1f1f4; }
+    .showcase-overview {
+      margin: 44px 0 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      background: #080d22;
+    }
+    .showcase-overview img, .showcase-shot img { width: 100%; height: auto; display: block; }
+    .showcase-gallery { width: min(100%, 820px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 0 auto; }
+    .showcase-shot {
+      overflow: hidden;
+      margin: 0;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      background: #060c18;
+    }
+    .showcase-shot.wide { grid-column: 1 / -1; }
+    .showcase-shot figcaption { padding: 14px 16px 15px; color: rgba(255,255,255,.72); font-size: 12px; line-height: 1.5; }
+
     .about-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: 90px; }
     .about-copy { margin: 22px 0 0; color: var(--muted); line-height: 1.8; }
     .principles { border-top: 1px solid var(--line); }
@@ -149,6 +187,8 @@
       .section { padding: 78px 0; }
       .section-head, .app-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
       .section-intro { justify-self: start; }
+      .showcase-head { grid-template-columns: 1fr; gap: 26px; }
+      .showcase-head .store-link { justify-self: start; }
       .about-grid { gap: 48px; }
       .contact-grid { align-items: start; }
       .email { justify-self: start; }
@@ -175,6 +215,11 @@
       .app-card h3 { margin-top: 26px; }
       .features { margin-top: 22px; }
       .card-foot { margin-top: 30px; padding-top: 0; }
+      .showcase-shell { padding: 22px; border-radius: 24px; }
+      .showcase-overview { margin-top: 30px; border-radius: 15px; }
+      .showcase-gallery { gap: 10px; }
+      .showcase-shot { border-radius: 14px; }
+      .showcase-shot figcaption { padding: 10px 10px 11px; font-size: 10px; }
       .about-grid { gap: 34px; }
       .principle { padding: 22px 0; }
       .contact { padding: 62px 0 28px; }
@@ -275,6 +320,42 @@
             </ul>
             <div class="card-foot"><span class="meta"><span data-copy="ko">출시 일정은 추후 안내합니다.</span><span data-copy="en">Release date to be announced.</span></span></div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section melody-showcase" id="melodywave">
+      <div class="wrap">
+        <div class="showcase-shell">
+          <div class="showcase-head">
+            <div>
+              <p class="kicker">MelodyWave</p>
+              <h2 data-copy="ko">실제 화면으로 만나보세요.</h2>
+              <h2 data-copy="en">See MelodyWave in action.</h2>
+              <p class="showcase-copy" data-copy="ko">음악을 찾고 재생하는 순간부터 넓은 화면에서 사용하는 모습까지, MelodyWave의 실제 사용 화면을 담았습니다.</p>
+              <p class="showcase-copy" data-copy="en">Take a closer look at browsing, playback, and the MelodyWave experience across different screen sizes.</p>
+            </div>
+            <a class="store-link" href="https://play.google.com/store/apps/details?id=com.redskyfactory.musicplayer" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a>
+          </div>
+
+          <figure class="showcase-overview">
+            <img src="assets/melodywave/overview.webp" alt="MelodyWave app overview" width="1024" height="500" loading="lazy">
+          </figure>
+
+          <div class="showcase-gallery">
+            <figure class="showcase-shot">
+              <img src="assets/melodywave/player.webp" alt="MelodyWave player screen" width="720" height="1556" loading="lazy">
+              <figcaption><span data-copy="ko">재생에 집중한 플레이어</span><span data-copy="en">A player focused on the music</span></figcaption>
+            </figure>
+            <figure class="showcase-shot">
+              <img src="assets/melodywave/library.webp" alt="MelodyWave music library screen" width="720" height="1567" loading="lazy">
+              <figcaption><span data-copy="ko">곡과 폴더를 한눈에</span><span data-copy="en">Songs and folders at a glance</span></figcaption>
+            </figure>
+            <figure class="showcase-shot wide">
+              <img src="assets/melodywave/landscape.webp" alt="MelodyWave landscape screen" width="1400" height="667" loading="lazy">
+              <figcaption><span data-copy="ko">넓은 화면에서도 자연스럽게</span><span data-copy="en">Designed for larger screens</span></figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
