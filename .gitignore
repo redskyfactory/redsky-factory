@@ -4,3 +4,6 @@ Desktop.ini
 .idea/
 .vscode/
 *.log
+.dev.vars*
+.env*
+.codex-remote-attachments/

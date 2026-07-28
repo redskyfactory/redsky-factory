@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Redsky Factory 앱에 관한 문의와 의견을 보내주세요.">
+  <meta name="theme-color" content="#f4f1eb">
+  <link rel="canonical" href="https://redskyfactory.com/contact">
+  <link rel="icon" href="/assets/redsky-symbol.png" type="image/png">
+  <title>문의 — Redsky Factory</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --surface: #fbfaf7;
+      --ink: #171917;
+      --muted: #686a65;
+      --line: #d9d4ca;
+      --red: #d84936;
+      --red-dark: #a83225;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+    button, input, select, textarea { font: inherit; }
+    a { color: inherit; }
+    .wrap { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
+    .skip { position: fixed; left: 16px; top: -100px; z-index: 100; padding: 10px 14px; border-radius: 8px; background: var(--ink); color: white; text-decoration: none; }
+    .skip:focus { top: 12px; }
+
+    header { position: sticky; top: 0; z-index: 20; background: rgba(244,241,235,.88); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+    .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; letter-spacing: -.03em; }
+    .brand-logo { width: 40px; height: 30px; display: block; object-fit: contain; }
+    .nav-right, .nav-links, .lang { display: flex; align-items: center; }
+    .nav-right { gap: 24px; }
+    .nav-links { gap: 24px; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; }
+    .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--ink); }
+    .home-button { min-height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); text-decoration: none; font-size: 12px; font-weight: 750; }
+    .home-button:hover { border-color: #aaa59b; }
+    .lang { padding: 3px; border: 1px solid var(--line); border-radius: 999px; }
+    .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: 12px; }
+    .lang button.active { background: var(--ink); color: white; }
+
+    main { padding: 88px 0 110px; }
+    .contact-layout { display: grid; grid-template-columns: minmax(0, .82fr) minmax(420px, 1.18fr); gap: 90px; align-items: start; }
+    .kicker { margin: 0 0 18px; color: var(--red-dark); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 0; max-width: 560px; font-size: clamp(48px, 6vw, 76px); line-height: 1.02; letter-spacing: -.06em; }
+    body[data-lang="ko"] h1 { font-size: clamp(42px, 5.6vw, 66px); line-height: 1.12; letter-spacing: -.055em; }
+    .intro { max-width: 520px; margin: 26px 0 0; color: var(--muted); font-size: 16px; line-height: 1.8; }
+    .direct { margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--line); }
+    .direct-label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 12px; }
+    .direct-email { font-weight: 760; text-decoration: none; user-select: text; -webkit-user-select: text; }
+
+    .form-shell { padding: 34px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); box-shadow: 0 22px 60px rgba(38, 34, 28, .07); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .field { display: grid; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    label { font-size: 13px; font-weight: 750; }
+    .optional { color: var(--muted); font-weight: 500; }
+    input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 11px; background: white; color: var(--ink); outline: none; transition: border-color .16s ease, box-shadow .16s ease; }
+    input, select { min-height: 48px; padding: 0 13px; }
+    textarea { min-height: 190px; padding: 13px; resize: vertical; line-height: 1.65; }
+    input:focus, select:focus, textarea:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(216,73,54,.11); }
+    input::placeholder, textarea::placeholder { color: #9a9b96; }
+    .form-note { margin: 17px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .form-actions { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
+    .submit { min-height: 48px; padding: 0 20px; border: 0; border-radius: 11px; background: var(--ink); color: white; cursor: pointer; font-size: 14px; font-weight: 750; }
+    .submit:hover { background: #2c302d; }
+    .submit:disabled { cursor: wait; opacity: .58; }
+    .form-status { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .form-status.success { color: #246b42; }
+    .form-status.error { color: var(--red-dark); }
+    .turnstile-slot { min-height: 0; margin-top: 20px; }
+    .website-field { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; }
+
+    footer { padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 24px; line-height: 1.6; }
+    [data-copy] { display: none; }
+    body[data-lang="ko"] [data-copy="ko"], body[data-lang="en"] [data-copy="en"] { display: revert; }
+
+    @media (max-width: 820px) {
+      main { padding: 68px 0 86px; }
+      .nav-links { display: none; }
+      .nav-right { gap: 10px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 52px; }
+      .form-shell { max-width: 660px; }
+    }
+
+    @media (max-width: 520px) {
+      .wrap { width: min(calc(100% - 28px), var(--max)); }
+      .nav { height: 62px; }
+      .brand span:last-child { display: none; }
+      main { padding: 48px 0 68px; }
+      h1, body[data-lang="ko"] h1 { font-size: 38px; }
+      .intro { font-size: 15px; }
+      .direct { margin-top: 32px; }
+      .form-shell { padding: 22px; border-radius: 18px; }
+      .form-grid { grid-template-columns: 1fr; gap: 16px; }
+      .field.full { grid-column: auto; }
+      .form-actions { align-items: flex-start; flex-direction: column; }
+      .submit { width: 100%; }
+      .footer-inner { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body data-lang="ko">
+  <a class="skip" href="#main">본문으로 바로가기</a>
+  <header>
+    <nav class="nav wrap" aria-label="주요 메뉴">
+      <a class="brand" href="/" aria-label="Redsky Factory 홈">
+        <img class="brand-logo" src="/assets/redsky-symbol.png" alt="" width="40" height="30"><span>Redsky Factory</span>
+      </a>
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="/#apps"><span data-copy="ko">앱</span><span data-copy="en">Apps</span></a>
+          <a href="/#studio"><span data-copy="ko">스튜디오</span><span data-copy="en">Studio</span></a>
+          <a href="/contact" aria-current="page"><span data-copy="ko">문의</span><span data-copy="en">Contact</span></a>
+        </div>
+        <a class="home-button" href="/" aria-label="Redsky Factory 홈으로"><span aria-hidden="true">←</span><span data-copy="ko">홈</span><span data-copy="en">Home</span></a>
+        <div class="lang" aria-label="언어 선택">
+          <button type="button" data-lang-button="ko" class="active" aria-pressed="true">KO</button>
+          <button type="button" data-lang-button="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="contact-layout wrap">
+      <section>
+        <p class="kicker">Contact us</p>
+        <h1 data-copy="ko">문의와 의견을 보내주세요.</h1>
+        <h1 data-copy="en">Questions or feedback?</h1>
+        <p class="intro" data-copy="ko">앱 사용 중 불편한 점이나 궁금한 점을 알려주세요. 버그를 제보할 때는 앱 이름, 기기 모델, Android 버전과 문제가 발생한 상황을 함께 적어주시면 확인에 도움이 됩니다.</p>
+        <p class="intro" data-copy="en">Tell us what you need help with. For bug reports, please include the app name, device model, Android version, and what happened when the issue occurred.</p>
+        <div class="direct">
+          <span class="direct-label"><span data-copy="ko">이메일로 직접 문의</span><span data-copy="en">Contact us directly by email</span></span>
+          <!--email_off--><a class="direct-email" href="mailto:contact@redskyfactory.com" draggable="false">contact@redskyfactory.com</a><!--/email_off-->
+        </div>
+      </section>
+
+      <section class="form-shell" aria-label="문의 양식">
+        <form id="contact-form">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="type"><span data-copy="ko">문의 유형</span><span data-copy="en">Inquiry type</span></label>
+              <select id="type" name="type" required>
+                <option value="general" data-ko="일반 문의" data-en="General inquiry">일반 문의</option>
+                <option value="melodywave" data-ko="MelodyWave 문의" data-en="MelodyWave">MelodyWave 문의</option>
+                <option value="onepic" data-ko="OnePic 문의" data-en="OnePic">OnePic 문의</option>
+                <option value="bug" data-ko="오류 제보" data-en="Bug report">오류 제보</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="name"><span data-copy="ko">이름 <span class="optional">(선택)</span></span><span data-copy="en">Name <span class="optional">(optional)</span></span></label>
+              <input id="name" name="name" type="text" maxlength="80" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="email"><span data-copy="ko">회신받을 이메일</span><span data-copy="en">Email for reply</span></label>
+              <input id="email" name="email" type="email" maxlength="160" autocomplete="email" required>
+            </div>
+            <div class="field full">
+              <label for="message"><span data-copy="ko">문의 내용</span><span data-copy="en">Message</span></label>
+              <textarea id="message" name="message" maxlength="5000" required data-placeholder-ko="문의 내용을 입력해주세요." data-placeholder-en="How can we help?"></textarea>
+            </div>
+          </div>
+          <div class="website-field" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <div id="turnstile-slot" class="turnstile-slot"></div>
+          <p class="form-note" data-copy="ko">입력한 정보는 문의 확인과 답변 목적으로만 사용됩니다.</p>
+          <p class="form-note" data-copy="en">The information you provide is used only to review and respond to your inquiry.</p>
+          <div class="form-actions">
+            <button class="submit" type="submit"><span data-copy="ko">문의 보내기</span><span data-copy="en">Send message</span></button>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner wrap">
+      <span>© 2026 Redsky Factory</span>
+      <span data-copy="ko">Redsky Factory는 독립 Android 앱 스튜디오입니다.</span>
+      <span data-copy="en">Redsky Factory is an independent Android app studio.</span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const body = document.body;
+      const buttons = [...document.querySelectorAll('[data-lang-button]')];
+      const typeOptions = [...document.querySelectorAll('#type option')];
+      const message = document.getElementById('message');
+      let currentLanguage = 'ko';
+      let turnstileWidgetId = null;
+
+      const setLanguage = (lang) => {
+        currentLanguage = lang;
+        body.dataset.lang = lang;
+        document.documentElement.lang = lang;
+        document.title = lang === 'ko' ? '문의 — Redsky Factory' : 'Contact — Redsky Factory';
+        buttons.forEach((button) => {
+          const selected = button.dataset.langButton === lang;
+          button.classList.toggle('active', selected);
+          button.setAttribute('aria-pressed', String(selected));
+        });
+        typeOptions.forEach((option) => { option.textContent = option.dataset[lang]; });
+        message.placeholder = message.dataset[`placeholder${lang === 'ko' ? 'Ko' : 'En'}`];
+        try { localStorage.setItem('redsky-language', lang); } catch (_) {}
+      };
+
+      buttons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.langButton)));
+      try {
+        const saved = localStorage.getItem('redsky-language');
+        if (saved === 'ko' || saved === 'en') setLanguage(saved);
+        else setLanguage('ko');
+      } catch (_) { setLanguage('ko'); }
+
+      const loadTurnstile = async () => {
+        try {
+          const response = await fetch('/api/contact', { headers: { Accept: 'application/json' } });
+          if (!response.ok) return;
+          const config = await response.json();
+          if (!config.turnstileSiteKey) return;
+          const script = document.createElement('script');
+          script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+          script.async = true;
+          script.defer = true;
+          script.onload = () => {
+            turnstileWidgetId = window.turnstile.render('#turnstile-slot', {
+              sitekey: config.turnstileSiteKey,
+              theme: 'light',
+            });
+          };
+          document.head.appendChild(script);
+        } catch (_) {}
+      };
+      loadTurnstile();
+
+      const form = document.getElementById('contact-form');
+      const submitButton = form.querySelector('.submit');
+      const status = document.getElementById('form-status');
+      const openedAt = Date.now();
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        status.className = 'form-status';
+        status.textContent = currentLanguage === 'ko' ? '전송 중입니다…' : 'Sending…';
+        submitButton.disabled = true;
+
+        const data = new FormData(form);
+        const payload = {
+          type: data.get('type'),
+          name: data.get('name'),
+          email: data.get('email'),
+          message: data.get('message'),
+          website: data.get('website'),
+          language: currentLanguage,
+          openedAt,
+          turnstileToken: data.get('cf-turnstile-response') || '',
+        };
+
+        try {
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.message || 'send_failed');
+
+          form.reset();
+          typeOptions.forEach((option) => { option.textContent = option.dataset[currentLanguage]; });
+          message.placeholder = message.dataset[`placeholder${currentLanguage === 'ko' ? 'Ko' : 'En'}`];
+          status.className = 'form-status success';
+          status.textContent = currentLanguage === 'ko'
+            ? '문의가 전송되었습니다. 확인 후 답변드리겠습니다.'
+            : 'Your message has been sent. We will get back to you soon.';
+          if (turnstileWidgetId !== null && window.turnstile) window.turnstile.reset(turnstileWidgetId);
+        } catch (_) {
+          status.className = 'form-status error';
+          status.textContent = currentLanguage === 'ko'
+            ? '전송하지 못했습니다. 잠시 후 다시 시도하거나 이메일로 문의해주세요.'
+            : 'We could not send your message. Please try again or contact us by email.';
+          if (turnstileWidgetId !== null && window.turnstile) window.turnstile.reset(turnstileWidgetId);
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
