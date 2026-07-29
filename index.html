@@ -101,7 +101,6 @@
     .section-intro { margin: 0; max-width: 480px; justify-self: end; color: var(--muted); font-size: 15px; line-height: 1.75; }
     .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     .app-card { min-height: 440px; display: flex; flex-direction: column; padding: 34px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
-    .app-card.upcoming { background: #e8e4db; }
     .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
     .app-icon { width: 52px; height: 52px; display: block; object-fit: cover; border-radius: 15px; box-shadow: 0 6px 16px rgba(23, 25, 23, .14); }
     .status { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; font-size: 11px; color: var(--muted); }
@@ -115,6 +114,7 @@
     .store-link:hover { transform: translateY(-2px); background: #2c302d; }
     .store-link::after { content: "↗"; font-size: 13px; }
     .meta { color: var(--muted); font-size: 12px; }
+    .future-note { margin: 24px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; text-align: center; }
 
     .melody-showcase { background: #ebe6dd; }
     .showcase-shell {
@@ -257,8 +257,8 @@
           <p class="eyebrow"><span data-copy="ko">독립 Android 앱 스튜디오</span><span data-copy="en">Independent Android studio</span></p>
           <h1 data-copy="ko">매일 쓰기 편한 앱을 만듭니다.</h1>
           <h1 data-copy="en">Simple apps for everyday use.</h1>
-          <p class="hero-copy" data-copy="ko">Redsky Factory는 꼭 필요한 기능에 집중하는 독립 Android 앱 스튜디오입니다. 오프라인 음악 플레이어 MelodyWave를 출시했으며, 갤러리 앱 OnePic을 준비하고 있습니다.</p>
-          <p class="hero-copy" data-copy="en">Redsky Factory is an independent Android app studio focused on useful, straightforward experiences. MelodyWave is available now, and OnePic is currently in development.</p>
+          <p class="hero-copy" data-copy="ko">Redsky Factory는 꼭 필요한 기능에 집중하는 독립 Android 앱 스튜디오입니다. 오프라인 음악 플레이어 MelodyWave와 갤러리 앱 OnePic을 출시했습니다.</p>
+          <p class="hero-copy" data-copy="en">Redsky Factory is an independent Android app studio focused on useful, straightforward experiences. MelodyWave and OnePic are both available now.</p>
           <div class="actions">
             <a class="button primary" href="#apps"><span data-copy="ko">앱 살펴보기</span><span data-copy="en">View our apps</span></a>
           </div>
@@ -274,8 +274,8 @@
       <div class="wrap">
         <div class="section-head">
           <div><p class="kicker">Apps</p><h2 data-copy="ko">Redsky Factory의 앱</h2><h2 data-copy="en">Our apps</h2></div>
-          <p class="section-intro" data-copy="ko">출시된 MelodyWave와 현재 준비 중인 OnePic을 소개합니다. 새로운 소식과 출시 정보는 이곳에 업데이트하겠습니다.</p>
-          <p class="section-intro" data-copy="en">Meet MelodyWave, available now, and OnePic, currently in development. Product news and release information will be posted here.</p>
+          <p class="section-intro" data-copy="ko">Google Play에서 만나볼 수 있는 MelodyWave와 OnePic을 소개합니다. 앱 소식과 업데이트 정보도 이곳에 전하겠습니다.</p>
+          <p class="section-intro" data-copy="en">Meet MelodyWave and OnePic, both available on Google Play. App news and updates will be posted here.</p>
         </div>
 
         <div class="app-grid">
@@ -293,8 +293,8 @@
             <div class="card-foot"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.redskyfactory.musicplayer" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a><span class="meta">Android</span></div>
           </article>
 
-          <article class="app-card upcoming">
-            <div class="card-top"><img class="app-icon" src="assets/onepic-icon.svg" alt="OnePic 앱 아이콘" width="52" height="52"><span class="status"><span data-copy="ko">준비 중</span><span data-copy="en">Upcoming</span></span></div>
+          <article class="app-card">
+            <div class="card-top"><img class="app-icon" src="assets/onepic-icon.svg" alt="OnePic 앱 아이콘" width="52" height="52"><span class="status"><span data-copy="ko">출시됨</span><span data-copy="en">Released</span></span></div>
             <h3>OnePic</h3>
             <span class="app-type"><span data-copy="ko">사진 갤러리</span><span data-copy="en">Photo gallery</span></span>
             <p class="app-desc" data-copy="ko">휴대전화에 저장된 사진을 둘러보고 정리할 수 있는 Android 갤러리 앱입니다.</p>
@@ -302,9 +302,11 @@
             <ul class="features">
               <li><span data-copy="ko">앨범 정리</span><span data-copy="en">Albums</span></li>
             </ul>
-            <div class="card-foot"><span class="meta"><span data-copy="ko">출시 일정은 추후 안내합니다.</span><span data-copy="en">Release date to be announced.</span></span></div>
+            <div class="card-foot"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.onepic.gallery" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a><span class="meta">Android</span></div>
           </article>
         </div>
+        <p class="future-note" data-copy="ko">앞으로 출시하는 새로운 앱도 이곳에 계속 추가하겠습니다.</p>
+        <p class="future-note" data-copy="en">More apps will be added here as they are released.</p>
       </div>
     </section>
 
