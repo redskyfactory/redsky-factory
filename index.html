@@ -71,8 +71,8 @@
     .brand-logo { width: 40px; height: 30px; display: block; object-fit: contain; }
     .nav-right, .lang { display: flex; align-items: center; }
     .nav-right { gap: 24px; }
-    .tools-link { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; font-size: 12px; font-weight: 750; transition: border-color .18s ease, background .18s ease; }
-    .tools-link:hover { border-color: rgba(23, 25, 23, .34); background: white; }
+    .tools-link, .contact-link { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; font-size: 12px; font-weight: 750; transition: border-color .18s ease, background .18s ease; }
+    .tools-link:hover, .contact-link:hover { border-color: rgba(23, 25, 23, .34); background: white; }
     .lang { padding: 3px; border: 1px solid var(--line); border-radius: 999px; }
     .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: 12px; }
     .lang button.active { background: var(--ink); color: white; }
@@ -236,6 +236,7 @@
       </a>
       <div class="nav-right">
         <a class="tools-link" href="https://tools.redskyfactory.com/">Tools</a>
+        <a class="contact-link" href="/contact"><span data-copy="ko">문의</span><span data-copy="en">Contact</span></a>
         <div class="lang" aria-label="언어 선택">
           <button type="button" data-lang-button="ko" class="active" aria-pressed="true">KO</button>
           <button type="button" data-lang-button="en" aria-pressed="false">EN</button>
