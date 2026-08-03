@@ -99,7 +99,22 @@
       cursor: pointer;
       width: 100%;
     }
+    .drop-zone.has-selection { min-height: 292px; }
     .drop-zone.is-dragging { box-shadow: inset 0 0 0 3px rgba(216, 73, 54, .22); }
+    .drop-default, .drop-selected { display: block; width: 100%; }
+    .drop-zone.has-selection .drop-default { display: none; }
+    .drop-selected { display: none; }
+    .drop-zone.has-selection .drop-selected { display: grid; justify-items: center; gap: 10px; }
+    .drop-preview-image {
+      width: min(100%, 360px);
+      height: 178px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: repeating-conic-gradient(#e9e5dc 0 25%, #fffefa 0 50%) 50% / 16px 16px;
+      box-shadow: 0 10px 24px rgba(38, 34, 28, .12);
+    }
+    .drop-selected-title { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: -.02em; }
+    .drop-selected-copy { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
     .drop-icon {
       width: 70px;
       height: 70px;
@@ -252,10 +267,15 @@
       <section class="tool-panel" aria-label="이미지 변환 도구">
         <input class="file-input" id="file-input" type="file" accept=".png,.jpg,.jpeg,.webp,.bmp,image/png,image/jpeg,image/webp,image/bmp" multiple>
         <button class="drop-zone" id="drop-zone" type="button">
-          <span>
+          <span class="drop-default">
             <span class="drop-icon">+</span>
             <span class="drop-title"><span data-copy="ko">이미지를 선택하거나 끌어놓기</span><span data-copy="en">Choose or drop images</span></span>
             <span class="drop-copy"><span data-copy="ko">PNG, JPG, WebP, BMP 파일을 선택할 수 있습니다. 여러 장도 한 번에 변환할 수 있습니다.</span><span data-copy="en">PNG, JPG, WebP, and BMP files are supported. You can convert several images at once.</span></span>
+          </span>
+          <span class="drop-selected" aria-live="polite">
+            <img class="drop-preview-image" id="drop-preview-image" alt="선택한 이미지 미리보기">
+            <span class="drop-selected-title" id="drop-selected-title"><span data-copy="ko">이미지를 선택했습니다</span><span data-copy="en">Image selected</span></span>
+            <span class="drop-selected-copy" id="drop-selected-copy"></span>
           </span>
         </button>
 
@@ -315,6 +335,8 @@
     (() => {
       const fileInput = document.getElementById('file-input');
       const dropZone = document.getElementById('drop-zone');
+      const dropPreviewImage = document.getElementById('drop-preview-image');
+      const dropSelectedCopy = document.getElementById('drop-selected-copy');
       const format = document.getElementById('format');
       const maxSize = document.getElementById('max-size');
       const quality = document.getElementById('quality');
@@ -341,6 +363,8 @@
           empty: '아직 선택한 이미지가 없습니다.',
           unsupported: '변환할 수 있는 이미지 파일을 선택해주세요.',
           ready: '{count}개 이미지가 준비됐습니다.',
+          selectedOne: '선택됨: {name}',
+          selectedMany: '{name} 외 {count}개 선택됨',
           converting: '변환 중입니다...',
           done: '{success}/{total}개 이미지 변환이 끝났습니다.',
           readError: '이미지를 읽을 수 없습니다.',
@@ -355,6 +379,8 @@
           empty: 'No images selected yet.',
           unsupported: 'Please choose an image file that can be converted.',
           ready: '{count} image(s) ready.',
+          selectedOne: 'Selected: {name}',
+          selectedMany: '{name} + {count} more selected',
           converting: 'Converting...',
           done: '{success}/{total} image(s) converted.',
           readError: 'Could not read the image.',
@@ -396,6 +422,7 @@
       };
       const refreshDynamicText = () => {
         statusText.textContent = t(lastStatus.key, lastStatus.values);
+        updateSelectionPreviewText();
         document.querySelectorAll('[data-result-meta]').forEach((meta) => {
           meta.textContent = t('resultMeta', {
             original: meta.dataset.original,
@@ -430,6 +457,22 @@
         objectUrls = [];
       };
 
+      const updateSelectionPreviewText = () => {
+        if (!selectedFiles.length) {
+          dropZone.classList.remove('has-selection');
+          dropPreviewImage.removeAttribute('src');
+          dropSelectedCopy.textContent = '';
+          return;
+        }
+        dropZone.classList.add('has-selection');
+        const firstName = selectedFiles[0].name || 'image';
+        const key = selectedFiles.length > 1 ? 'selectedMany' : 'selectedOne';
+        dropSelectedCopy.textContent = t(key, {
+          name: firstName,
+          count: selectedFiles.length - 1,
+        });
+      };
+
       const updateControls = () => {
         convertButton.disabled = selectedFiles.length === 0;
         qualityValue.textContent = `${quality.value}%`;
@@ -446,6 +489,11 @@
         });
         results.innerHTML = '';
         revokeUrls();
+        if (selectedFiles.length) {
+          dropPreviewImage.src = URL.createObjectURL(selectedFiles[0]);
+          objectUrls.push(dropPreviewImage.src);
+        }
+        updateSelectionPreviewText();
         if (!selectedFiles.length) {
           setStatus('unsupported');
         } else {
@@ -640,6 +688,7 @@
         fileInput.value = '';
         results.innerHTML = '';
         revokeUrls();
+        updateSelectionPreviewText();
         setStatus('empty');
         updateControls();
       });
