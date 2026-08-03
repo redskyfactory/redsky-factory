@@ -46,6 +46,7 @@
     .nav { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
     .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 780; letter-spacing: -.03em; }
     .brand img { width: 40px; height: 30px; object-fit: contain; display: block; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
     .main-site-link {
       min-height: 38px;
       display: inline-flex;
@@ -60,6 +61,9 @@
       font-weight: 760;
     }
     .main-site-link:hover { border-color: rgba(23, 25, 23, .34); }
+    .lang { display: flex; align-items: center; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: rgba(251, 250, 247, .7); }
+    .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 760; }
+    .lang button.active { background: var(--ink); color: white; }
 
     main { padding: 82px 0 104px; }
     .hero { max-width: 790px; }
@@ -107,6 +111,9 @@
     .coming-card::after { background: rgba(23, 25, 23, .04); }
     .coming-card .tool-icon { background: transparent; border: 1px solid var(--line); color: var(--muted); }
     .coming-card:hover { transform: none; border-color: var(--line); box-shadow: none; }
+    [data-copy="en"] { display: none; }
+    body[data-lang="en"] [data-copy="ko"] { display: none; }
+    body[data-lang="en"] [data-copy="en"] { display: revert; }
 
     footer { padding: 30px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
     .footer-inner { display: flex; justify-content: space-between; gap: 20px; line-height: 1.6; }
@@ -121,6 +128,7 @@
       .wrap { width: min(calc(100% - 28px), var(--max)); }
       .nav { min-height: 64px; }
       .brand span { display: none; }
+      .main-site-link { padding-inline: 10px; }
       h1 { font-size: 42px; }
       .lead { font-size: 15px; }
       .section-head { display: block; }
@@ -130,44 +138,50 @@
     }
   </style>
 </head>
-<body>
+<body data-lang="ko">
   <header>
     <nav class="nav wrap" aria-label="주요 메뉴">
       <a class="brand" href="/" aria-label="Redsky Factory Tools 홈">
         <img src="https://redskyfactory.com/assets/redsky-symbol.png" alt="" width="40" height="30">
         <span>Redsky Factory Tools</span>
       </a>
-      <a class="main-site-link" href="https://redskyfactory.com/">Redsky Factory</a>
+      <div class="nav-actions">
+        <a class="main-site-link" href="https://redskyfactory.com/">Redsky Factory</a>
+        <div class="lang" aria-label="언어 선택">
+          <button type="button" data-lang-button="ko" class="active" aria-pressed="true">KO</button>
+          <button type="button" data-lang-button="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="hero wrap">
       <p class="kicker">Redsky Factory Tools</p>
-      <h1>필요할 때 바로 쓰는 작은 도구들.</h1>
-      <p class="lead">설치와 가입 없이 브라우저에서 바로 사용할 수 있는 도구를 만듭니다. 복잡한 기능보다 자주 필요한 작업을 빠르고 간단하게 처리하는 데 집중합니다.</p>
-      <p class="local-note">파일은 서버로 전송하지 않고 브라우저에서 처리합니다</p>
+      <h1><span data-copy="ko">필요할 때 바로 쓰는 작은 도구들.</span><span data-copy="en">Small tools, ready when you need them.</span></h1>
+      <p class="lead"><span data-copy="ko">설치와 가입 없이 브라우저에서 바로 사용할 수 있는 도구를 만듭니다. 복잡한 기능보다 자주 필요한 작업을 빠르고 간단하게 처리하는 데 집중합니다.</span><span data-copy="en">A growing set of browser-based tools that work without installation or sign-up. The focus is simple: make everyday file tasks quick, clear, and lightweight.</span></p>
+      <p class="local-note"><span data-copy="ko">파일은 서버로 전송하지 않고 브라우저에서 처리합니다</span><span data-copy="en">Files are processed in your browser, not uploaded to a server</span></p>
     </section>
 
     <section class="tools-section wrap" aria-labelledby="tools-title">
       <div class="section-head">
-        <h2 id="tools-title">도구 목록</h2>
-        <p>새로운 도구를 차례로 추가할 예정입니다.</p>
+        <h2 id="tools-title"><span data-copy="ko">도구 목록</span><span data-copy="en">Tools</span></h2>
+        <p><span data-copy="ko">새로운 도구를 차례로 추가할 예정입니다.</span><span data-copy="en">More small utilities will be added over time.</span></p>
       </div>
       <div class="tool-grid">
         <a class="tool-card" href="./image-converter/">
           <div class="tool-top">
             <span class="tool-icon" aria-hidden="true">IMG</span>
-            <span class="status">사용 가능</span>
+            <span class="status"><span data-copy="ko">사용 가능</span><span data-copy="en">Available</span></span>
           </div>
           <div class="tool-copy">
-            <h3>이미지 포맷 변환기</h3>
-            <p>이미지 여러 장을 원하는 크기와 포맷으로 한 번에 변환합니다. 모든 작업은 현재 브라우저 안에서 처리됩니다.</p>
+            <h3><span data-copy="ko">이미지 포맷 변환기</span><span data-copy="en">Image Format Converter</span></h3>
+            <p><span data-copy="ko">이미지 여러 장을 원하는 크기와 포맷으로 한 번에 변환합니다. 모든 작업은 현재 브라우저 안에서 처리됩니다.</span><span data-copy="en">Convert multiple images to the format and size you need. Everything runs locally in your browser.</span></p>
             <div class="tool-bottom">
               <span class="format-list" aria-label="지원 포맷">
                 <span>PNG</span><span>JPG</span><span>WebP</span><span>BMP</span>
               </span>
-              <span class="open-label">열기</span>
+              <span class="open-label"><span data-copy="ko">열기</span><span data-copy="en">Open</span></span>
             </div>
           </div>
         </a>
@@ -175,11 +189,11 @@
         <div class="tool-card coming-card" aria-label="새 도구 준비 중">
           <div class="tool-top">
             <span class="tool-icon" aria-hidden="true">+</span>
-            <span class="status">준비 중</span>
+            <span class="status"><span data-copy="ko">준비 중</span><span data-copy="en">Coming soon</span></span>
           </div>
           <div class="tool-copy">
-            <h3>다음 도구</h3>
-            <p>작지만 유용한 도구를 계속 추가하겠습니다.</p>
+            <h3><span data-copy="ko">다음 도구</span><span data-copy="en">Next Tool</span></h3>
+            <p><span data-copy="ko">작지만 유용한 도구를 계속 추가하겠습니다.</span><span data-copy="en">More useful little tools are on the way.</span></p>
           </div>
         </div>
       </div>
@@ -192,5 +206,34 @@
       <span>Tools by Redsky Factory</span>
     </div>
   </footer>
+  <script>
+    (() => {
+      const buttons = document.querySelectorAll('[data-lang-button]');
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const titles = {
+        ko: 'Redsky Factory Tools',
+        en: 'Redsky Factory Tools',
+      };
+      const descriptions = {
+        ko: 'Redsky Factory가 만든 간단하고 실용적인 웹 도구 모음입니다.',
+        en: 'A simple, practical collection of web tools by Redsky Factory.',
+      };
+      const setLanguage = (lang) => {
+        const safeLang = lang === 'en' ? 'en' : 'ko';
+        document.body.dataset.lang = safeLang;
+        document.documentElement.lang = safeLang;
+        document.title = titles[safeLang];
+        if (metaDescription) metaDescription.setAttribute('content', descriptions[safeLang]);
+        localStorage.setItem('redskyToolsLang', safeLang);
+        buttons.forEach((button) => {
+          const active = button.dataset.langButton === safeLang;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      };
+      buttons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.langButton)));
+      setLanguage(localStorage.getItem('redskyToolsLang') || 'ko');
+    })();
+  </script>
 </body>
 </html>

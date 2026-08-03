@@ -65,6 +65,9 @@
       cursor: pointer;
     }
     .ghost-button:hover, .home-link:hover { border-color: rgba(23, 25, 23, .34); }
+    .lang { display: flex; align-items: center; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: rgba(251, 250, 247, .7); }
+    .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 760; }
+    .lang button.active { background: var(--ink); color: white; }
 
     main { padding: 64px 0 96px; }
     .hero { display: grid; grid-template-columns: minmax(0, .92fr) minmax(420px, 1.08fr); align-items: start; gap: 54px; }
@@ -193,6 +196,9 @@
 
     footer { padding: 30px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
     .footer-inner { display: flex; justify-content: space-between; gap: 20px; line-height: 1.6; }
+    [data-copy="en"] { display: none; }
+    body[data-lang="en"] [data-copy="ko"] { display: none; }
+    body[data-lang="en"] [data-copy="en"] { display: revert; }
 
     @media (max-width: 860px) {
       main { padding-top: 46px; }
@@ -204,6 +210,7 @@
       .nav { min-height: 64px; }
       .brand span { display: none; }
       .home-link { padding-inline: 10px; }
+      .nav-actions { gap: 8px; }
       h1 { font-size: 38px; }
       .settings { padding: 20px; }
       .settings-grid { grid-template-columns: 1fr; }
@@ -216,7 +223,7 @@
     }
   </style>
 </head>
-<body>
+<body data-lang="ko">
   <header>
     <nav class="nav wrap" aria-label="주요 메뉴">
       <a class="brand" href="/" aria-label="Redsky Factory Tools 홈">
@@ -224,7 +231,11 @@
         <span>Redsky Factory Tools</span>
       </a>
       <div class="nav-actions">
-        <a class="home-link" href="/">도구 목록</a>
+        <a class="home-link" href="/"><span data-copy="ko">도구 목록</span><span data-copy="en">Tools</span></a>
+        <div class="lang" aria-label="언어 선택">
+          <button type="button" data-lang-button="ko" class="active" aria-pressed="true">KO</button>
+          <button type="button" data-lang-button="en" aria-pressed="false">EN</button>
+        </div>
       </div>
     </nav>
   </header>
@@ -233,9 +244,9 @@
     <div class="hero wrap">
       <section>
         <p class="kicker">Image Converter</p>
-        <h1>이미지 포맷을 가볍게 바꿉니다.</h1>
-        <p class="lead">이미지를 올리고 원하는 포맷을 고르면 PNG, JPG, WebP, BMP 파일로 서로 변환할 수 있습니다. 앱 아이콘, 스토어 이미지, 웹사이트용 이미지를 빠르게 정리할 때 쓰기 좋게 만들었습니다.</p>
-        <p class="privacy-note"><b>로컬 변환</b><span>파일은 서버로 업로드되지 않고 현재 브라우저 안에서만 처리됩니다. 변환이 끝나면 바로 내려받을 수 있습니다.</span></p>
+        <h1><span data-copy="ko">이미지 포맷을 가볍게 바꿉니다.</span><span data-copy="en">Convert image formats without the fuss.</span></h1>
+        <p class="lead"><span data-copy="ko">이미지를 올리고 원하는 포맷을 고르면 PNG, JPG, WebP, BMP 파일로 서로 변환할 수 있습니다. 앱 아이콘, 스토어 이미지, 웹사이트용 이미지를 빠르게 정리할 때 쓰기 좋게 만들었습니다.</span><span data-copy="en">Drop in your images, choose a format, and convert between PNG, JPG, WebP, and BMP. It is handy for app icons, store assets, and website images.</span></p>
+        <p class="privacy-note"><b><span data-copy="ko">로컬 변환</span><span data-copy="en">Local conversion</span></b><span><span data-copy="ko">파일은 서버로 업로드되지 않고 현재 브라우저 안에서만 처리됩니다. 변환이 끝나면 바로 내려받을 수 있습니다.</span><span data-copy="en">Your files are not uploaded to a server. They are processed in this browser and can be downloaded right away.</span></span></p>
       </section>
 
       <section class="tool-panel" aria-label="이미지 변환 도구">
@@ -243,15 +254,15 @@
         <button class="drop-zone" id="drop-zone" type="button">
           <span>
             <span class="drop-icon">+</span>
-            <span class="drop-title">이미지를 선택하거나 끌어놓기</span>
-            <span class="drop-copy">PNG, JPG, WebP, BMP 파일을 선택할 수 있습니다. 여러 장도 한 번에 변환할 수 있습니다.</span>
+            <span class="drop-title"><span data-copy="ko">이미지를 선택하거나 끌어놓기</span><span data-copy="en">Choose or drop images</span></span>
+            <span class="drop-copy"><span data-copy="ko">PNG, JPG, WebP, BMP 파일을 선택할 수 있습니다. 여러 장도 한 번에 변환할 수 있습니다.</span><span data-copy="en">PNG, JPG, WebP, and BMP files are supported. You can convert several images at once.</span></span>
           </span>
         </button>
 
         <div class="settings">
           <div class="settings-grid">
             <div class="field">
-              <label for="format">변환할 포맷</label>
+              <label for="format"><span data-copy="ko">변환할 포맷</span><span data-copy="en">Output format</span></label>
               <select id="format">
                 <option value="image/png">PNG</option>
                 <option value="image/jpeg">JPG</option>
@@ -260,25 +271,25 @@
               </select>
             </div>
             <div class="field">
-              <label for="max-size">최대 긴 변 길이</label>
+              <label for="max-size"><span data-copy="ko">최대 긴 변 길이</span><span data-copy="en">Max long edge</span></label>
               <input id="max-size" type="number" min="0" max="12000" step="100" value="0" inputmode="numeric" aria-describedby="max-size-help">
             </div>
             <div class="field" id="quality-field">
               <div class="quality-row">
-                <label for="quality">품질</label>
+                <label for="quality"><span data-copy="ko">품질</span><span data-copy="en">Quality</span></label>
                 <span class="quality-value" id="quality-value">92%</span>
               </div>
               <input id="quality" type="range" min="40" max="100" value="92">
             </div>
             <div class="field" id="background-field">
-              <label for="background">불투명 포맷 배경색</label>
+              <label for="background"><span data-copy="ko">불투명 포맷 배경색</span><span data-copy="en">Background for opaque formats</span></label>
               <input id="background" type="color" value="#ffffff">
             </div>
           </div>
-          <p class="drop-copy" id="max-size-help">0으로 두면 원본 크기로 변환합니다. JPG와 BMP는 투명 배경을 지정한 색으로 채웁니다.</p>
+          <p class="drop-copy" id="max-size-help"><span data-copy="ko">0으로 두면 원본 크기로 변환합니다. JPG와 BMP는 투명 배경을 지정한 색으로 채웁니다.</span><span data-copy="en">Set this to 0 to keep the original size. JPG and BMP fill transparent areas with the selected background color.</span></p>
           <div class="panel-actions">
-            <button class="primary-button" id="convert-button" type="button" disabled>변환하기</button>
-            <button class="secondary-button" id="clear-button" type="button">비우기</button>
+            <button class="primary-button" id="convert-button" type="button" disabled><span data-copy="ko">변환하기</span><span data-copy="en">Convert</span></button>
+            <button class="secondary-button" id="clear-button" type="button"><span data-copy="ko">비우기</span><span data-copy="en">Clear</span></button>
           </div>
         </div>
       </section>
@@ -286,7 +297,7 @@
 
     <section class="result-section wrap" aria-label="변환 결과">
       <div class="result-head">
-        <h2>변환 결과</h2>
+        <h2><span data-copy="ko">변환 결과</span><span data-copy="en">Results</span></h2>
         <p class="status-text" id="status-text">아직 선택한 이미지가 없습니다.</p>
       </div>
       <div class="results" id="results"></div>
@@ -315,6 +326,8 @@
       const statusText = document.getElementById('status-text');
       const qualityField = document.getElementById('quality-field');
       const backgroundField = document.getElementById('background-field');
+      const languageButtons = document.querySelectorAll('[data-lang-button]');
+      const metaDescription = document.querySelector('meta[name="description"]');
       const supportedInputTypes = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/bmp', 'image/x-bmp', 'image/x-ms-bmp']);
       const supportedInputExtensions = new Set(['png', 'jpg', 'jpeg', 'webp', 'bmp']);
       const outputExtensions = {
@@ -323,8 +336,50 @@
         'image/webp': 'webp',
         'image/bmp': 'bmp',
       };
+      const messages = {
+        ko: {
+          empty: '아직 선택한 이미지가 없습니다.',
+          unsupported: '변환할 수 있는 이미지 파일을 선택해주세요.',
+          ready: '{count}개 이미지가 준비됐습니다.',
+          converting: '변환 중입니다...',
+          done: '{success}/{total}개 이미지 변환이 끝났습니다.',
+          readError: '이미지를 읽을 수 없습니다.',
+          sizeError: '이미지 크기를 확인할 수 없습니다.',
+          canvasError: '브라우저에서 변환을 시작할 수 없습니다.',
+          saveError: '이 포맷으로 저장할 수 없습니다.',
+          convertError: '변환하지 못했습니다.',
+          resultMeta: '원본 {original} → 변환 {output} · {width}×{height}',
+          download: '다운로드',
+        },
+        en: {
+          empty: 'No images selected yet.',
+          unsupported: 'Please choose an image file that can be converted.',
+          ready: '{count} image(s) ready.',
+          converting: 'Converting...',
+          done: '{success}/{total} image(s) converted.',
+          readError: 'Could not read the image.',
+          sizeError: 'Could not detect the image size.',
+          canvasError: 'Could not start conversion in this browser.',
+          saveError: 'Could not save this format.',
+          convertError: 'Conversion failed.',
+          resultMeta: 'Original {original} → Converted {output} · {width}×{height}',
+          download: 'Download',
+        },
+      };
+      const pageMeta = {
+        ko: {
+          title: '이미지 포맷 변환기 | Redsky Factory Tools',
+          description: 'Redsky Factory 이미지 포맷 변환 도구. PNG, JPG, WebP, BMP 파일을 서로 변환할 수 있습니다.',
+        },
+        en: {
+          title: 'Image Format Converter | Redsky Factory Tools',
+          description: 'A Redsky Factory image format converter for PNG, JPG, WebP, and BMP files.',
+        },
+      };
       let selectedFiles = [];
       let objectUrls = [];
+      let currentLang = 'ko';
+      let lastStatus = { key: 'empty', values: {} };
 
       const formatBytes = (bytes) => {
         if (!bytes) return '0 B';
@@ -334,7 +389,42 @@
       };
 
       const baseName = (name) => name.replace(/\.[^.]+$/, '') || 'converted-image';
-      const setStatus = (message) => { statusText.textContent = message; };
+      const t = (key, values = {}) => (messages[currentLang][key] || messages.ko[key] || key).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+      const setStatus = (key, values = {}) => {
+        lastStatus = { key, values };
+        statusText.textContent = t(key, values);
+      };
+      const refreshDynamicText = () => {
+        statusText.textContent = t(lastStatus.key, lastStatus.values);
+        document.querySelectorAll('[data-result-meta]').forEach((meta) => {
+          meta.textContent = t('resultMeta', {
+            original: meta.dataset.original,
+            output: meta.dataset.output,
+            width: meta.dataset.width,
+            height: meta.dataset.height,
+          });
+        });
+        document.querySelectorAll('.download-link').forEach((link) => {
+          link.textContent = t('download');
+        });
+        document.querySelectorAll('[data-error-message]').forEach((meta) => {
+          meta.textContent = meta.dataset.errorMessage || t('convertError');
+        });
+      };
+      const setLanguage = (lang) => {
+        currentLang = lang === 'en' ? 'en' : 'ko';
+        document.body.dataset.lang = currentLang;
+        document.documentElement.lang = currentLang;
+        document.title = pageMeta[currentLang].title;
+        if (metaDescription) metaDescription.setAttribute('content', pageMeta[currentLang].description);
+        localStorage.setItem('redskyToolsLang', currentLang);
+        languageButtons.forEach((button) => {
+          const active = button.dataset.langButton === currentLang;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        refreshDynamicText();
+      };
       const revokeUrls = () => {
         objectUrls.forEach((url) => URL.revokeObjectURL(url));
         objectUrls = [];
@@ -357,9 +447,9 @@
         results.innerHTML = '';
         revokeUrls();
         if (!selectedFiles.length) {
-          setStatus('변환할 수 있는 이미지 파일을 선택해주세요.');
+          setStatus('unsupported');
         } else {
-          setStatus(`${selectedFiles.length}개 이미지가 준비됐습니다.`);
+          setStatus('ready', { count: selectedFiles.length });
         }
         updateControls();
       };
@@ -369,7 +459,7 @@
         objectUrls.push(url);
         const image = new Image();
         image.onload = () => resolve({ image, url });
-        image.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.'));
+        image.onerror = () => reject(new Error(t('readError')));
         image.src = url;
       });
 
@@ -427,7 +517,7 @@
         const { image, url } = await loadImage(file);
         const width = image.naturalWidth || image.width;
         const height = image.naturalHeight || image.height;
-        if (!width || !height) throw new Error('이미지 크기를 확인할 수 없습니다.');
+        if (!width || !height) throw new Error(t('sizeError'));
 
         const outputType = format.value;
         const outputSize = getOutputSize(width, height);
@@ -436,7 +526,7 @@
         canvas.height = outputSize.height;
         const isOpaqueOutput = outputType === 'image/jpeg' || outputType === 'image/bmp';
         const ctx = canvas.getContext('2d', { alpha: !isOpaqueOutput });
-        if (!ctx) throw new Error('브라우저에서 변환을 시작할 수 없습니다.');
+        if (!ctx) throw new Error(t('canvasError'));
         if (isOpaqueOutput) {
           ctx.fillStyle = background.value;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -446,7 +536,7 @@
         const blob = outputType === 'image/bmp'
           ? canvasToBmpBlob(canvas, ctx)
           : await new Promise((resolve, reject) => {
-            canvas.toBlob((result) => result ? resolve(result) : reject(new Error('이 포맷으로 저장할 수 없습니다.')), outputType, Number(quality.value) / 100);
+            canvas.toBlob((result) => result ? resolve(result) : reject(new Error(t('saveError'))), outputType, Number(quality.value) / 100);
           });
 
         const downloadUrl = URL.createObjectURL(blob);
@@ -479,14 +569,24 @@
         name.textContent = result.downloadName;
         const meta = document.createElement('p');
         meta.className = 'result-meta';
-        meta.textContent = `원본 ${formatBytes(result.originalSize)} → 변환 ${formatBytes(result.outputSize)} · ${result.width}×${result.height}`;
+        meta.dataset.resultMeta = 'true';
+        meta.dataset.original = formatBytes(result.originalSize);
+        meta.dataset.output = formatBytes(result.outputSize);
+        meta.dataset.width = result.width;
+        meta.dataset.height = result.height;
+        meta.textContent = t('resultMeta', {
+          original: meta.dataset.original,
+          output: meta.dataset.output,
+          width: meta.dataset.width,
+          height: meta.dataset.height,
+        });
         info.append(name, meta);
 
         const link = document.createElement('a');
         link.className = 'download-link';
         link.href = result.downloadUrl;
         link.download = result.downloadName;
-        link.textContent = '다운로드';
+        link.textContent = t('download');
 
         card.append(thumb, info, link);
         results.appendChild(card);
@@ -503,7 +603,8 @@
         name.textContent = file.name;
         const meta = document.createElement('p');
         meta.className = 'result-meta';
-        meta.textContent = error.message || '변환하지 못했습니다.';
+        meta.dataset.errorMessage = error.message || '';
+        meta.textContent = error.message || t('convertError');
         info.append(name, meta);
         card.append(thumb, info);
         results.appendChild(card);
@@ -512,7 +613,7 @@
       const convertAll = async () => {
         if (!selectedFiles.length) return;
         results.innerHTML = '';
-        setStatus('변환 중입니다...');
+        setStatus('converting');
         convertButton.disabled = true;
         clearButton.disabled = true;
 
@@ -526,7 +627,7 @@
             renderError(file, error);
           }
         }
-        setStatus(`${successCount}/${selectedFiles.length}개 이미지 변환이 끝났습니다.`);
+        setStatus('done', { success: successCount, total: selectedFiles.length });
         clearButton.disabled = false;
         updateControls();
       };
@@ -539,11 +640,12 @@
         fileInput.value = '';
         results.innerHTML = '';
         revokeUrls();
-        setStatus('아직 선택한 이미지가 없습니다.');
+        setStatus('empty');
         updateControls();
       });
       quality.addEventListener('input', updateControls);
       format.addEventListener('change', updateControls);
+      languageButtons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.langButton)));
 
       ['dragenter', 'dragover'].forEach((eventName) => {
         dropZone.addEventListener(eventName, (event) => {
@@ -560,6 +662,7 @@
       dropZone.addEventListener('drop', (event) => useFiles(event.dataTransfer.files));
 
       updateControls();
+      setLanguage(localStorage.getItem('redskyToolsLang') || 'ko');
     })();
   </script>
 </body>
