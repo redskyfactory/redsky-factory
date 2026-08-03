@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Redsky Factory가 만든 간단하고 실용적인 웹 도구 모음입니다.">
+  <meta name="theme-color" content="#f4f1eb">
+  <link rel="canonical" href="https://tools.redskyfactory.com/">
+  <link rel="icon" href="https://redskyfactory.com/assets/redsky-symbol.png" type="image/png">
+  <title>Redsky Factory Tools</title>
+  <style>
+    :root {
+      --paper: #f4f1eb;
+      --surface: #fbfaf7;
+      --ink: #171917;
+      --muted: #686b65;
+      --line: rgba(23, 25, 23, .14);
+      --red: #d84936;
+      --red-dark: #a83225;
+      --green: #4c8060;
+      --max: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      word-break: keep-all;
+    }
+    a { color: inherit; }
+    .wrap { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
+    :focus-visible { outline: 3px solid rgba(216, 73, 54, .28); outline-offset: 4px; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244, 241, 235, .9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .nav { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 780; letter-spacing: -.03em; }
+    .brand img { width: 40px; height: 30px; object-fit: contain; display: block; }
+    .main-site-link {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 760;
+    }
+    .main-site-link:hover { border-color: rgba(23, 25, 23, .34); }
+
+    main { padding: 82px 0 104px; }
+    .hero { max-width: 790px; }
+    .kicker { margin: 0 0 16px; color: var(--red-dark); font-size: 12px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(44px, 7vw, 78px); line-height: 1.02; letter-spacing: -.06em; }
+    .lead { max-width: 650px; margin: 24px 0 0; color: var(--muted); font-size: 17px; line-height: 1.8; }
+    .local-note { display: inline-flex; align-items: center; gap: 9px; margin-top: 30px; color: var(--green); font-size: 12px; font-weight: 800; }
+    .local-note::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 5px rgba(76, 128, 96, .12); }
+
+    .tools-section { margin-top: 76px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .section-head h2 { margin: 0; font-size: 28px; letter-spacing: -.045em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 12px; }
+    .tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+    .tool-card {
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 28px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--surface);
+      text-decoration: none;
+      box-shadow: 0 16px 42px rgba(38, 34, 28, .055);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .tool-card::after { content: ""; position: absolute; width: 180px; height: 180px; right: -66px; top: -82px; border-radius: 50%; background: rgba(216, 73, 54, .09); }
+    .tool-card:hover { transform: translateY(-3px); border-color: rgba(23, 25, 23, .28); box-shadow: 0 22px 52px rgba(38, 34, 28, .09); }
+    .tool-top { display: flex; align-items: start; justify-content: space-between; gap: 20px; position: relative; z-index: 1; }
+    .tool-icon { width: 62px; height: 62px; display: grid; place-items: center; border-radius: 17px; background: var(--ink); color: white; font-size: 13px; font-weight: 900; letter-spacing: .04em; }
+    .status { padding: 7px 9px; border-radius: 999px; background: rgba(76, 128, 96, .1); color: var(--green); font-size: 10px; font-weight: 850; }
+    .tool-copy { position: relative; z-index: 1; }
+    .tool-copy h3 { margin: 0; font-size: 25px; letter-spacing: -.04em; }
+    .tool-copy p { margin: 11px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .tool-bottom { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 22px; }
+    .format-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .format-list span { padding: 6px 8px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); font-size: 10px; font-weight: 800; }
+    .open-label { font-size: 12px; font-weight: 850; white-space: nowrap; }
+    .open-label::after { content: " →"; color: var(--red); }
+    .coming-card { border-style: dashed; box-shadow: none; background: rgba(251, 250, 247, .48); }
+    .coming-card::after { background: rgba(23, 25, 23, .04); }
+    .coming-card .tool-icon { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+    .coming-card:hover { transform: none; border-color: var(--line); box-shadow: none; }
+
+    footer { padding: 30px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; line-height: 1.6; }
+
+    @media (max-width: 720px) {
+      main { padding: 58px 0 78px; }
+      .tools-section { margin-top: 58px; }
+      .tool-grid { grid-template-columns: 1fr; }
+      .coming-card { min-height: 190px; }
+    }
+    @media (max-width: 520px) {
+      .wrap { width: min(calc(100% - 28px), var(--max)); }
+      .nav { min-height: 64px; }
+      .brand span { display: none; }
+      h1 { font-size: 42px; }
+      .lead { font-size: 15px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 8px; }
+      .tool-card { min-height: 230px; padding: 22px; }
+      .footer-inner { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav wrap" aria-label="주요 메뉴">
+      <a class="brand" href="/" aria-label="Redsky Factory Tools 홈">
+        <img src="https://redskyfactory.com/assets/redsky-symbol.png" alt="" width="40" height="30">
+        <span>Redsky Factory Tools</span>
+      </a>
+      <a class="main-site-link" href="https://redskyfactory.com/">Redsky Factory</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <p class="kicker">Redsky Factory Tools</p>
+      <h1>필요할 때 바로 쓰는 작은 도구들.</h1>
+      <p class="lead">설치와 가입 없이 브라우저에서 바로 사용할 수 있는 도구를 만듭니다. 복잡한 기능보다 자주 필요한 작업을 빠르고 간단하게 처리하는 데 집중합니다.</p>
+      <p class="local-note">파일은 서버로 전송하지 않고 브라우저에서 처리합니다</p>
+    </section>
+
+    <section class="tools-section wrap" aria-labelledby="tools-title">
+      <div class="section-head">
+        <h2 id="tools-title">도구 목록</h2>
+        <p>새로운 도구를 차례로 추가할 예정입니다.</p>
+      </div>
+      <div class="tool-grid">
+        <a class="tool-card" href="./image-converter/">
+          <div class="tool-top">
+            <span class="tool-icon" aria-hidden="true">IMG</span>
+            <span class="status">사용 가능</span>
+          </div>
+          <div class="tool-copy">
+            <h3>이미지 포맷 변환기</h3>
+            <p>이미지 여러 장을 원하는 크기와 포맷으로 한 번에 변환합니다. 모든 작업은 현재 브라우저 안에서 처리됩니다.</p>
+            <div class="tool-bottom">
+              <span class="format-list" aria-label="지원 포맷">
+                <span>PNG</span><span>JPG</span><span>WebP</span><span>BMP</span>
+              </span>
+              <span class="open-label">열기</span>
+            </div>
+          </div>
+        </a>
+
+        <div class="tool-card coming-card" aria-label="새 도구 준비 중">
+          <div class="tool-top">
+            <span class="tool-icon" aria-hidden="true">+</span>
+            <span class="status">준비 중</span>
+          </div>
+          <div class="tool-copy">
+            <h3>다음 도구</h3>
+            <p>작지만 유용한 도구를 계속 추가하겠습니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner wrap">
+      <span>© 2026 Redsky Factory</span>
+      <span>Tools by Redsky Factory</span>
+    </div>
+  </footer>
+</body>
+</html>
