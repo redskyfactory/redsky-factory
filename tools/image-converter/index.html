@@ -265,7 +265,7 @@
       </section>
 
       <section class="tool-panel" aria-label="이미지 변환 도구">
-        <input class="file-input" id="file-input" type="file" accept=".png,.jpg,.jpeg,.webp,.bmp,image/png,image/jpeg,image/webp,image/bmp" multiple>
+        <input class="file-input" id="file-input" type="file" accept="image/*,.png,.jpg,.jpeg,.webp,.bmp,image/png,image/jpeg,image/webp,image/bmp" multiple>
         <button class="drop-zone" id="drop-zone" type="button">
           <span class="drop-default">
             <span class="drop-icon">+</span>
@@ -352,6 +352,14 @@
       const metaDescription = document.querySelector('meta[name="description"]');
       const supportedInputTypes = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/bmp', 'image/x-bmp', 'image/x-ms-bmp']);
       const supportedInputExtensions = new Set(['png', 'jpg', 'jpeg', 'webp', 'bmp']);
+      const extensionByType = {
+        'image/png': 'png',
+        'image/jpeg': 'jpg',
+        'image/webp': 'webp',
+        'image/bmp': 'bmp',
+        'image/x-bmp': 'bmp',
+        'image/x-ms-bmp': 'bmp',
+      };
       const outputExtensions = {
         'image/png': 'png',
         'image/jpeg': 'jpg',
@@ -414,7 +422,31 @@
         return `${(bytes / Math.pow(1024, index)).toFixed(index ? 1 : 0)} ${units[index]}`;
       };
 
-      const baseName = (name) => name.replace(/\.[^.]+$/, '') || 'converted-image';
+      const getExtension = (name = '') => {
+        const match = String(name).toLowerCase().match(/\.([a-z0-9]+)$/);
+        return match ? match[1] : '';
+      };
+      const baseName = (name = '') => String(name).replace(/\.[^.]+$/, '') || 'converted-image';
+      const isGeneratedMobileName = (name = '') => {
+        const bareName = baseName(name).trim();
+        return !bareName || /^\d{8,}$/.test(bareName);
+      };
+      const displayNameFor = (file, index) => {
+        const extension = getExtension(file.name) || extensionByType[file.type] || 'image';
+        if (file.name && !isGeneratedMobileName(file.name) && getExtension(file.name)) return file.name;
+        const label = currentLang === 'ko' ? '이미지' : 'Image';
+        return `${label} ${index + 1}.${extension}`;
+      };
+      const outputBaseNameFor = (file, index) => {
+        if (file.name && !isGeneratedMobileName(file.name) && getExtension(file.name)) return baseName(file.name);
+        return `image-${String(index + 1).padStart(2, '0')}`;
+      };
+      const canTryAsImage = (file) => {
+        const extension = getExtension(file.name);
+        if (supportedInputTypes.has(file.type) || supportedInputExtensions.has(extension)) return true;
+        if (file.type && file.type.startsWith('image/')) return true;
+        return (!file.type || file.type === 'application/octet-stream') && !extension;
+      };
       const t = (key, values = {}) => (messages[currentLang][key] || messages.ko[key] || key).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
       const setStatus = (key, values = {}) => {
         lastStatus = { key, values };
@@ -465,7 +497,7 @@
           return;
         }
         dropZone.classList.add('has-selection');
-        const firstName = selectedFiles[0].name || 'image';
+        const firstName = displayNameFor(selectedFiles[0], 0);
         const key = selectedFiles.length > 1 ? 'selectedMany' : 'selectedOne';
         dropSelectedCopy.textContent = t(key, {
           name: firstName,
@@ -483,10 +515,7 @@
       };
 
       const useFiles = (fileList) => {
-        selectedFiles = [...fileList].filter((file) => {
-          const extension = file.name.toLowerCase().split('.').pop();
-          return supportedInputTypes.has(file.type) || supportedInputExtensions.has(extension);
-        });
+        selectedFiles = [...fileList].filter(canTryAsImage);
         results.innerHTML = '';
         revokeUrls();
         if (selectedFiles.length) {
@@ -561,7 +590,7 @@
         return new Blob([buffer], { type: 'image/bmp' });
       };
 
-      const convertFile = async (file) => {
+      const convertFile = async (file, index) => {
         const { image, url } = await loadImage(file);
         const width = image.naturalWidth || image.width;
         const height = image.naturalHeight || image.height;
@@ -592,7 +621,7 @@
         return {
           inputUrl: url,
           downloadUrl,
-          downloadName: `${baseName(file.name)}.${outputExtensions[outputType]}`,
+          downloadName: `${outputBaseNameFor(file, index)}.${outputExtensions[outputType]}`,
           originalSize: file.size,
           outputSize: blob.size,
           width: outputSize.width,
@@ -640,7 +669,7 @@
         results.appendChild(card);
       };
 
-      const renderError = (file, error) => {
+      const renderError = (file, error, index) => {
         const card = document.createElement('article');
         card.className = 'result-card error-card';
         const thumb = document.createElement('div');
@@ -648,7 +677,7 @@
         const info = document.createElement('div');
         const name = document.createElement('p');
         name.className = 'result-name';
-        name.textContent = file.name;
+        name.textContent = displayNameFor(file, index);
         const meta = document.createElement('p');
         meta.className = 'result-meta';
         meta.dataset.errorMessage = error.message || '';
@@ -666,13 +695,13 @@
         clearButton.disabled = true;
 
         let successCount = 0;
-        for (const file of selectedFiles) {
+        for (const [index, file] of selectedFiles.entries()) {
           try {
-            const result = await convertFile(file);
+            const result = await convertFile(file, index);
             renderResult(file, result);
             successCount += 1;
           } catch (error) {
-            renderError(file, error);
+            renderError(file, error, index);
           }
         }
         setStatus('done', { success: successCount, total: selectedFiles.length });
