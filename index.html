@@ -376,23 +376,62 @@
     (() => {
       const body = document.body;
       const buttons = [...document.querySelectorAll('[data-lang-button]')];
+      const languageKey = 'redsky-language';
+      const legacyLanguageKeys = ['redsky-language', 'redskyToolsLang'];
+      const isLanguage = (value) => value === 'ko' || value === 'en';
+      const getCookieDomain = () => {
+        const host = window.location.hostname;
+        return host === 'redskyfactory.com' || host.endsWith('.redskyfactory.com') ? '; Domain=.redskyfactory.com' : '';
+      };
+      const getCookieLanguage = () => {
+        const cookie = document.cookie.split('; ').find((item) => item.startsWith(`${languageKey}=`));
+        if (!cookie) return '';
+        const value = decodeURIComponent(cookie.split('=').slice(1).join('='));
+        return isLanguage(value) ? value : '';
+      };
+      const saveLanguage = (lang) => {
+        try {
+          document.cookie = `${languageKey}=${encodeURIComponent(lang)}; Max-Age=31536000; Path=/; SameSite=Lax${getCookieDomain()}`;
+        } catch (_) {}
+        try {
+          localStorage.setItem(languageKey, lang);
+          localStorage.setItem('redskyToolsLang', lang);
+        } catch (_) {}
+      };
+      const getSavedLanguage = () => {
+        const cookieLang = getCookieLanguage();
+        if (cookieLang) return cookieLang;
+        try {
+          for (const key of legacyLanguageKeys) {
+            const saved = localStorage.getItem(key);
+            if (isLanguage(saved)) return saved;
+          }
+        } catch (_) {}
+        return 'ko';
+      };
       const setLanguage = (lang) => {
-        body.dataset.lang = lang;
-        document.documentElement.lang = lang;
-        document.title = lang === 'ko' ? 'Redsky Factory — Android 앱 스튜디오' : 'Redsky Factory — Android apps';
+        const safeLang = isLanguage(lang) ? lang : 'ko';
+        body.dataset.lang = safeLang;
+        document.documentElement.lang = safeLang;
+        document.title = safeLang === 'ko' ? 'Redsky Factory — Android 앱 스튜디오' : 'Redsky Factory — Android apps';
         buttons.forEach((button) => {
-          const selected = button.dataset.langButton === lang;
+          const selected = button.dataset.langButton === safeLang;
           button.classList.toggle('active', selected);
           button.setAttribute('aria-pressed', String(selected));
         });
-        try { localStorage.setItem('redsky-language', lang); } catch (_) {}
+        saveLanguage(safeLang);
       };
 
       buttons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.langButton)));
-      try {
-        const saved = localStorage.getItem('redsky-language');
-        if (saved === 'ko' || saved === 'en') setLanguage(saved);
-      } catch (_) {}
+      setLanguage(getSavedLanguage());
+      window.addEventListener('pageshow', () => {
+        const saved = getSavedLanguage();
+        if (saved !== body.dataset.lang) setLanguage(saved);
+      });
+      window.addEventListener('focus', () => {
+        const saved = getSavedLanguage();
+        if (saved !== body.dataset.lang) setLanguage(saved);
+      });
 
       const header = document.getElementById('header');
       const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 8);

@@ -218,13 +218,46 @@
         ko: 'Redsky Factory가 만든 간단하고 실용적인 웹 도구 모음입니다.',
         en: 'A simple, practical collection of web tools by Redsky Factory.',
       };
+      const languageKey = 'redsky-language';
+      const legacyLanguageKeys = ['redsky-language', 'redskyToolsLang'];
+      const isLanguage = (value) => value === 'ko' || value === 'en';
+      const getCookieDomain = () => {
+        const host = window.location.hostname;
+        return host === 'redskyfactory.com' || host.endsWith('.redskyfactory.com') ? '; Domain=.redskyfactory.com' : '';
+      };
+      const getCookieLanguage = () => {
+        const cookie = document.cookie.split('; ').find((item) => item.startsWith(`${languageKey}=`));
+        if (!cookie) return '';
+        const value = decodeURIComponent(cookie.split('=').slice(1).join('='));
+        return isLanguage(value) ? value : '';
+      };
+      const saveLanguage = (lang) => {
+        try {
+          document.cookie = `${languageKey}=${encodeURIComponent(lang)}; Max-Age=31536000; Path=/; SameSite=Lax${getCookieDomain()}`;
+        } catch (_) {}
+        try {
+          localStorage.setItem(languageKey, lang);
+          localStorage.setItem('redskyToolsLang', lang);
+        } catch (_) {}
+      };
+      const getSavedLanguage = () => {
+        const cookieLang = getCookieLanguage();
+        if (cookieLang) return cookieLang;
+        try {
+          for (const key of legacyLanguageKeys) {
+            const saved = localStorage.getItem(key);
+            if (isLanguage(saved)) return saved;
+          }
+        } catch (_) {}
+        return 'ko';
+      };
       const setLanguage = (lang) => {
-        const safeLang = lang === 'en' ? 'en' : 'ko';
+        const safeLang = isLanguage(lang) ? lang : 'ko';
         document.body.dataset.lang = safeLang;
         document.documentElement.lang = safeLang;
         document.title = titles[safeLang];
         if (metaDescription) metaDescription.setAttribute('content', descriptions[safeLang]);
-        localStorage.setItem('redskyToolsLang', safeLang);
+        saveLanguage(safeLang);
         buttons.forEach((button) => {
           const active = button.dataset.langButton === safeLang;
           button.classList.toggle('active', active);
@@ -232,7 +265,15 @@
         });
       };
       buttons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.langButton)));
-      setLanguage(localStorage.getItem('redskyToolsLang') || 'ko');
+      setLanguage(getSavedLanguage());
+      window.addEventListener('pageshow', () => {
+        const saved = getSavedLanguage();
+        if (saved !== document.body.dataset.lang) setLanguage(saved);
+      });
+      window.addEventListener('focus', () => {
+        const saved = getSavedLanguage();
+        if (saved !== document.body.dataset.lang) setLanguage(saved);
+      });
     })();
   </script>
 </body>

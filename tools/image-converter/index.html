@@ -414,6 +414,39 @@
       let objectUrls = [];
       let currentLang = 'ko';
       let lastStatus = { key: 'empty', values: {} };
+      const languageKey = 'redsky-language';
+      const legacyLanguageKeys = ['redsky-language', 'redskyToolsLang'];
+      const isLanguage = (value) => value === 'ko' || value === 'en';
+      const getCookieDomain = () => {
+        const host = window.location.hostname;
+        return host === 'redskyfactory.com' || host.endsWith('.redskyfactory.com') ? '; Domain=.redskyfactory.com' : '';
+      };
+      const getCookieLanguage = () => {
+        const cookie = document.cookie.split('; ').find((item) => item.startsWith(`${languageKey}=`));
+        if (!cookie) return '';
+        const value = decodeURIComponent(cookie.split('=').slice(1).join('='));
+        return isLanguage(value) ? value : '';
+      };
+      const saveLanguage = (lang) => {
+        try {
+          document.cookie = `${languageKey}=${encodeURIComponent(lang)}; Max-Age=31536000; Path=/; SameSite=Lax${getCookieDomain()}`;
+        } catch (_) {}
+        try {
+          localStorage.setItem(languageKey, lang);
+          localStorage.setItem('redskyToolsLang', lang);
+        } catch (_) {}
+      };
+      const getSavedLanguage = () => {
+        const cookieLang = getCookieLanguage();
+        if (cookieLang) return cookieLang;
+        try {
+          for (const key of legacyLanguageKeys) {
+            const saved = localStorage.getItem(key);
+            if (isLanguage(saved)) return saved;
+          }
+        } catch (_) {}
+        return 'ko';
+      };
 
       const formatBytes = (bytes) => {
         if (!bytes) return '0 B';
@@ -471,12 +504,12 @@
         });
       };
       const setLanguage = (lang) => {
-        currentLang = lang === 'en' ? 'en' : 'ko';
+        currentLang = isLanguage(lang) ? lang : 'ko';
         document.body.dataset.lang = currentLang;
         document.documentElement.lang = currentLang;
         document.title = pageMeta[currentLang].title;
         if (metaDescription) metaDescription.setAttribute('content', pageMeta[currentLang].description);
-        localStorage.setItem('redskyToolsLang', currentLang);
+        saveLanguage(currentLang);
         languageButtons.forEach((button) => {
           const active = button.dataset.langButton === currentLang;
           button.classList.toggle('active', active);
@@ -740,7 +773,15 @@
       dropZone.addEventListener('drop', (event) => useFiles(event.dataTransfer.files));
 
       updateControls();
-      setLanguage(localStorage.getItem('redskyToolsLang') || 'ko');
+      setLanguage(getSavedLanguage());
+      window.addEventListener('pageshow', () => {
+        const saved = getSavedLanguage();
+        if (saved !== currentLang) setLanguage(saved);
+      });
+      window.addEventListener('focus', () => {
+        const saved = getSavedLanguage();
+        if (saved !== currentLang) setLanguage(saved);
+      });
     })();
   </script>
 </body>
