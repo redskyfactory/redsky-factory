@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Redsky Factory의 Android 앱 MelodyWave와 OnePic을 소개합니다.">
+  <meta name="description" content="Redsky Factory의 Android 앱 MelodyWave와 OnePic, 준비 중인 사이다톡을 소개합니다.">
   <meta name="theme-color" content="#f4f1eb">
   <link rel="canonical" href="https://redskyfactory.com/">
   <link rel="icon" href="/assets/redsky-symbol.png" type="image/png">
@@ -100,9 +100,12 @@
     .section-intro { margin: 0; max-width: 480px; justify-self: end; color: var(--muted); font-size: 15px; line-height: 1.75; }
     .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     .app-card { min-height: 440px; display: flex; flex-direction: column; padding: 34px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+    .app-card-upcoming { grid-column: 1 / -1; min-height: 320px; }
     .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
     .app-icon { width: 52px; height: 52px; display: block; object-fit: cover; border-radius: 15px; box-shadow: 0 6px 16px rgba(23, 25, 23, .14); }
+    .app-icon-placeholder { display: grid; place-items: center; background: #72a75e; color: white; font-size: 16px; font-weight: 850; }
     .status { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; font-size: 11px; color: var(--muted); }
+    .status.upcoming { border-color: rgba(169, 47, 33, .22); background: rgba(216, 73, 54, .07); color: var(--red-dark); }
     .app-card h3 { margin: 34px 0 4px; font-size: 28px; letter-spacing: -.04em; }
     .app-type { color: var(--red-dark); font-size: 12px; font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
     .app-desc { max-width: 470px; margin: 18px 0 0; color: var(--muted); font-size: 14px; line-height: 1.75; }
@@ -112,6 +115,7 @@
     .store-link { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 0 13px; border-radius: 10px; background: var(--ink); color: white; text-decoration: none; font-size: 12px; font-weight: 750; transition: transform .18s ease, background .18s ease; }
     .store-link:hover { transform: translateY(-2px); background: #2c302d; }
     .store-link::after { content: "↗"; font-size: 13px; }
+    .upcoming-label { display: inline-flex; align-items: center; min-height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); font-size: 12px; font-weight: 750; }
     .meta { color: var(--muted); font-size: 12px; }
     .future-note { margin: 24px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; text-align: center; }
 
@@ -252,8 +256,8 @@
           <p class="eyebrow"><span data-copy="ko">독립 Android 앱 스튜디오</span><span data-copy="en">Independent Android studio</span></p>
           <h1 data-copy="ko">매일 쓰기 편한 앱을 만듭니다.</h1>
           <h1 data-copy="en">Simple apps for everyday use.</h1>
-          <p class="hero-copy" data-copy="ko">Redsky Factory는 꼭 필요한 기능에 집중하는 독립 Android 앱 스튜디오입니다. 오프라인 음악 플레이어 MelodyWave와 갤러리 앱 OnePic을 출시했습니다.</p>
-          <p class="hero-copy" data-copy="en">Redsky Factory is an independent Android app studio focused on useful, straightforward experiences. MelodyWave and OnePic are both available now.</p>
+          <p class="hero-copy" data-copy="ko">Redsky Factory는 꼭 필요한 기능에 집중하는 독립 Android 앱 스튜디오입니다. MelodyWave와 OnePic을 출시했으며, 새로운 앱 사이다톡을 준비하고 있습니다.</p>
+          <p class="hero-copy" data-copy="en">Redsky Factory is an independent Android app studio focused on useful, straightforward experiences. MelodyWave and OnePic are available now, and SaidaTalk is in development.</p>
           <div class="actions">
             <a class="button primary" href="#apps"><span data-copy="ko">앱 살펴보기</span><span data-copy="en">View our apps</span></a>
           </div>
@@ -269,8 +273,8 @@
       <div class="wrap">
         <div class="section-head">
           <div><p class="kicker">Apps</p><h2 data-copy="ko">Redsky Factory의 앱</h2><h2 data-copy="en">Our apps</h2></div>
-          <p class="section-intro" data-copy="ko">Google Play에서 만나볼 수 있는 MelodyWave와 OnePic을 소개합니다. 앱 소식과 업데이트 정보도 이곳에 전하겠습니다.</p>
-          <p class="section-intro" data-copy="en">Meet MelodyWave and OnePic, both available on Google Play. App news and updates will be posted here.</p>
+          <p class="section-intro" data-copy="ko">Google Play에서 만나볼 수 있는 MelodyWave와 OnePic, 그리고 준비 중인 사이다톡을 소개합니다.</p>
+          <p class="section-intro" data-copy="en">Meet MelodyWave and OnePic on Google Play, along with SaidaTalk, which is currently in development.</p>
         </div>
 
         <div class="app-grid">
@@ -299,9 +303,18 @@
             </ul>
             <div class="card-foot"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.onepic.gallery" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a><span class="meta">Android</span></div>
           </article>
+
+          <article class="app-card app-card-upcoming">
+            <div class="card-top"><span class="app-icon app-icon-placeholder" aria-hidden="true">톡</span><span class="status upcoming"><span data-copy="ko">준비 중</span><span data-copy="en">Coming soon</span></span></div>
+            <h3><span data-copy="ko">사이다톡</span><span data-copy="en">SaidaTalk</span></h3>
+            <span class="app-type"><span data-copy="ko">새로운 Android 앱</span><span data-copy="en">New Android app</span></span>
+            <p class="app-desc" data-copy="ko">새로운 Android 앱 사이다톡을 준비하고 있습니다. 자세한 기능과 출시 일정은 준비되는 대로 전하겠습니다.</p>
+            <p class="app-desc" data-copy="en">SaidaTalk is a new Android app currently in development. Features and release details will be shared as they become available.</p>
+            <div class="card-foot"><span class="upcoming-label"><span data-copy="ko">출시 준비 중</span><span data-copy="en">In development</span></span><span class="meta">Android</span></div>
+          </article>
         </div>
-        <p class="future-note" data-copy="ko">앞으로 출시하는 새로운 앱도 이곳에 계속 추가하겠습니다.</p>
-        <p class="future-note" data-copy="en">More apps will be added here as they are released.</p>
+        <p class="future-note" data-copy="ko">사이다톡의 개발 소식과 출시 일정은 준비되는 대로 이곳에 알려드리겠습니다.</p>
+        <p class="future-note" data-copy="en">Development news and release details for SaidaTalk will be posted here.</p>
       </div>
     </section>
 
