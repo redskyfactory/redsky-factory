@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="장르, 분위기, 악기, 보컬과 곡 구성을 조합해 음악 생성용 프롬프트를 만드는 브라우저 도구입니다.">
+  <meta name="theme-color" content="#f4f1eb">
+  <link rel="canonical" href="https://tools.redskyfactory.com/music-prompt-maker/">
+  <link rel="icon" href="/assets/redsky-symbol.png?v=20260809" type="image/png">
+  <title>음악 생성 프롬프트 메이커 | Redsky Factory Tools</title>
+  <style>
+    :root { --paper:#f4f1eb; --surface:#fbfaf7; --ink:#171917; --muted:#686b65; --line:rgba(23,25,23,.14); --red:#d84936; --red-dark:#a83225; --green:#4c8060; --soft:#ebe6dc; --max:1240px; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; word-break:keep-all; }
+    button,input,select,textarea { font:inherit; }
+    button { color:inherit; }
+    a { color:inherit; }
+    .wrap { width:min(calc(100% - 40px),var(--max)); margin:0 auto; }
+    :focus-visible { outline:3px solid rgba(216,73,54,.28); outline-offset:3px; }
+    header { position:sticky; top:0; z-index:20; background:rgba(244,241,235,.92); border-bottom:1px solid var(--line); backdrop-filter:blur(14px); }
+    .nav { min-height:74px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    .brand { display:inline-flex; align-items:center; gap:10px; text-decoration:none; font-weight:780; }
+    .brand img { width:40px; height:30px; object-fit:contain; display:block; }
+    .nav-actions { display:flex; align-items:center; gap:10px; }
+    .home-link { min-height:38px; display:inline-flex; align-items:center; justify-content:center; padding:0 13px; border:1px solid var(--line); border-radius:10px; background:var(--surface); text-decoration:none; font-size:12px; font-weight:760; }
+    .home-link:hover { border-color:rgba(23,25,23,.34); }
+    .lang { display:flex; align-items:center; padding:3px; border:1px solid var(--line); border-radius:999px; background:rgba(251,250,247,.7); }
+    .lang button { border:0; background:none; padding:6px 10px; border-radius:999px; cursor:pointer; color:var(--muted); font-size:12px; font-weight:760; }
+    .lang button.active { background:var(--ink); color:white; }
+    main { padding:58px 0 96px; }
+    .intro { display:grid; grid-template-columns:minmax(0,1fr) minmax(300px,.65fr); align-items:end; gap:54px; padding-bottom:42px; border-bottom:1px solid var(--line); }
+    .kicker { margin:0 0 14px; color:var(--red-dark); font-size:12px; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin:0; max-width:760px; font-size:clamp(40px,5.7vw,68px); line-height:1.06; letter-spacing:-.055em; }
+    .lead { max-width:680px; margin:20px 0 0; color:var(--muted); font-size:15px; line-height:1.8; }
+    .local-note { margin:0; padding:20px 22px; border-left:3px solid var(--green); background:rgba(251,250,247,.55); color:var(--muted); font-size:13px; line-height:1.7; }
+    .local-note b { display:block; margin-bottom:4px; color:var(--green); }
+    .workspace { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr); align-items:start; gap:22px; margin-top:26px; }
+    .form-shell,.result-shell { border:1px solid var(--line); border-radius:20px; background:var(--surface); box-shadow:0 18px 46px rgba(38,34,28,.055); }
+    .form-shell { overflow:hidden; }
+    .form-section { margin:0; padding:26px; border:0; border-bottom:1px solid var(--line); }
+    .form-section:last-child { border-bottom:0; }
+    .form-section legend { width:100%; float:left; margin:0 0 18px; padding:0; font-size:18px; font-weight:840; letter-spacing:-.03em; }
+    .form-section legend + * { clear:both; }
+    .fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+    .field { display:grid; gap:7px; min-width:0; }
+    .field.wide { grid-column:1 / -1; }
+    label,.field-label { color:var(--muted); font-size:12px; font-weight:780; }
+    input,select,textarea { width:100%; border:1px solid var(--line); border-radius:10px; background:white; color:var(--ink); outline:none; }
+    input,select { min-height:44px; padding:0 12px; }
+    textarea { min-height:88px; padding:12px; resize:vertical; line-height:1.55; }
+    input[type="range"] { min-height:auto; padding:0; border:0; accent-color:var(--red); }
+    .range-head { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .range-value { color:var(--ink); font-size:12px; font-weight:850; }
+    .segmented { display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px; border:1px solid var(--line); border-radius:11px; background:white; }
+    .segmented button { min-height:36px; border:0; border-radius:7px; background:transparent; cursor:pointer; color:var(--muted); font-size:12px; font-weight:820; }
+    .segmented button.active { background:var(--ink); color:white; }
+    .hidden { display:none !important; }
+    .result-shell { position:sticky; top:94px; overflow:hidden; }
+    .result-head { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:22px 22px 18px; border-bottom:1px solid var(--line); }
+    .result-head h2 { margin:0; font-size:22px; letter-spacing:-.04em; }
+    .result-actions { display:flex; flex-wrap:wrap; gap:7px; }
+    .action-button { min-height:36px; display:inline-flex; align-items:center; justify-content:center; padding:0 11px; border:1px solid var(--line); border-radius:9px; background:white; cursor:pointer; font-size:11px; font-weight:800; }
+    .action-button.primary { border-color:var(--ink); background:var(--ink); color:white; }
+    .action-button:hover { border-color:rgba(23,25,23,.38); }
+    .output-block { padding:20px 22px; border-bottom:1px solid var(--line); }
+    .output-block:last-of-type { border-bottom:0; }
+    .output-label { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:9px; }
+    .output-label b { font-size:13px; }
+    .mini-copy { border:0; background:none; cursor:pointer; color:var(--red-dark); font-size:11px; font-weight:820; }
+    .output { min-height:290px; margin:0; padding:15px; border:1px solid var(--line); border-radius:12px; background:#fffefa; color:#2a2d2a; font-family:"Noto Sans KR",Inter,sans-serif; font-size:12px; line-height:1.7; resize:vertical; }
+    .output.style-output { min-height:120px; }
+    .result-foot { display:flex; justify-content:space-between; gap:14px; padding:15px 22px; background:var(--soft); color:var(--muted); font-size:11px; line-height:1.55; }
+    .copy-status { color:var(--green); font-weight:800; }
+    footer { padding:30px 0; border-top:1px solid var(--line); color:var(--muted); font-size:11px; }
+    .footer-inner { display:flex; justify-content:space-between; gap:20px; line-height:1.6; }
+    [data-copy="en"] { display:none; }
+    body[data-lang="en"] [data-copy="ko"] { display:none; }
+    body[data-lang="en"] [data-copy="en"] { display:revert; }
+    @media (max-width:980px) { .intro { grid-template-columns:1fr; gap:26px; } .workspace { grid-template-columns:1fr; } .result-shell { position:static; } }
+    @media (max-width:580px) { .wrap { width:min(calc(100% - 28px),var(--max)); } .nav { min-height:64px; } .brand span { display:none; } .home-link { padding-inline:10px; } main { padding-top:40px; } h1 { font-size:38px; } .fields { grid-template-columns:1fr; } .field.wide { grid-column:auto; } .form-section { padding:21px; } .result-head { display:block; } .result-actions { margin-top:14px; } .output-block { padding:18px; } .result-foot,.footer-inner { flex-direction:column; } }
+  </style>
+</head>
+<body data-lang="ko">
+  <header>
+    <nav class="nav wrap" aria-label="주요 메뉴">
+      <a class="brand" href="/" aria-label="Redsky Factory Tools 홈">
+        <img src="/assets/redsky-symbol.png?v=20260809" alt="Redsky Factory" width="40" height="30" decoding="sync">
+        <span>Redsky Factory Tools</span>
+      </a>
+      <div class="nav-actions">
+        <a class="home-link" href="/"><span data-copy="ko">도구 목록</span><span data-copy="en">Tools</span></a>
+        <div class="lang" aria-label="언어 선택">
+          <button type="button" data-lang-button="ko" class="active" aria-pressed="true">KO</button>
+          <button type="button" data-lang-button="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <div>
+        <p class="kicker">Music Prompt Maker</p>
+        <h1><span data-copy="ko">음악의 방향을 정하고, 자세한 프롬프트로 만듭니다.</span><span data-copy="en">Shape your music idea into a detailed prompt.</span></h1>
+        <p class="lead"><span data-copy="ko">장르와 분위기부터 악기, 보컬, 가사 구성까지 선택하면 챗봇용 제작 명령과 짧은 스타일 프롬프트를 함께 만듭니다.</span><span data-copy="en">Choose genre, mood, instruments, vocals, and lyric structure to create both a production brief for a chatbot and a concise style prompt.</span></p>
+      </div>
+      <p class="local-note"><b><span data-copy="ko">브라우저에서만 처리</span><span data-copy="en">Processed in your browser</span></b><span data-copy="ko">입력한 주제와 설정은 서버나 AI 서비스로 전송되지 않습니다. 결과를 복사해 원하는 챗봇에서 사용하세요.</span><span data-copy="en">Your ideas and settings are not sent to a server or AI service. Copy the result into the chatbot of your choice.</span></p>
+    </section>
+
+    <div class="workspace">
+      <form class="form-shell" id="prompt-form">
+        <fieldset class="form-section">
+          <legend><span data-copy="ko">프로젝트</span><span data-copy="en">Project</span></legend>
+          <div class="fields">
+            <div class="field">
+              <span class="field-label"><span data-copy="ko">형식</span><span data-copy="en">Format</span></span>
+              <div class="segmented" role="group" aria-label="프로젝트 형식">
+                <button type="button" class="active" data-project="single"><span data-copy="ko">싱글</span><span data-copy="en">Single</span></button>
+                <button type="button" data-project="album"><span data-copy="ko">앨범</span><span data-copy="en">Album</span></button>
+              </div>
+            </div>
+            <div class="field hidden" id="track-count-field">
+              <label for="track-count"><span data-copy="ko">곡 수</span><span data-copy="en">Number of tracks</span></label>
+              <select id="track-count">
+                <option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option>
+              </select>
+            </div>
+            <div class="field wide">
+              <label for="theme"><span data-copy="ko">곡의 주제 또는 이야기</span><span data-copy="en">Theme or story</span></label>
+              <input id="theme" type="text" maxlength="180" data-placeholder-ko="예: 비 오는 새벽, 끝난 사랑을 떠올리며 혼자 걷는 장면" data-placeholder-en="Example: walking alone at dawn in the rain, remembering a past love">
+            </div>
+            <div class="field">
+              <label for="purpose"><span data-copy="ko">사용 목적</span><span data-copy="en">Purpose</span></label>
+              <select id="purpose">
+                <option value="personal" data-ko="개인 감상" data-en="Personal listening">개인 감상</option>
+                <option value="youtube" data-ko="YouTube 영상" data-en="YouTube video">YouTube 영상</option>
+                <option value="shorts" data-ko="쇼츠·릴스" data-en="Shorts or reels">쇼츠·릴스</option>
+                <option value="game" data-ko="게임·앱 배경음" data-en="Game or app soundtrack">게임·앱 배경음</option>
+                <option value="podcast" data-ko="팟캐스트·방송" data-en="Podcast or broadcast">팟캐스트·방송</option>
+                <option value="performance" data-ko="공연·무대" data-en="Performance">공연·무대</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="duration"><span data-copy="ko">목표 길이</span><span data-copy="en">Target length</span></label>
+              <select id="duration">
+                <option value="60" data-ko="약 1분" data-en="About 1 minute">약 1분</option>
+                <option value="120" data-ko="약 2분" data-en="About 2 minutes">약 2분</option>
+                <option value="180" data-ko="약 3분" data-en="About 3 minutes" selected>약 3분</option>
+                <option value="240" data-ko="약 4분" data-en="About 4 minutes">약 4분</option>
+                <option value="300" data-ko="약 5분" data-en="About 5 minutes">약 5분</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span data-copy="ko">장르와 분위기</span><span data-copy="en">Genre and mood</span></legend>
+          <div class="fields">
+            <div class="field">
+              <label for="genre-primary"><span data-copy="ko">주 장르</span><span data-copy="en">Primary genre</span></label>
+              <select id="genre-primary">
+                <option value="kpop" data-ko="K-pop" data-en="K-pop">K-pop</option>
+                <option value="pop" data-ko="팝" data-en="Pop">팝</option>
+                <option value="ballad" data-ko="발라드" data-en="Ballad">발라드</option>
+                <option value="rnb" data-ko="R&B" data-en="R&B">R&amp;B</option>
+                <option value="hiphop" data-ko="힙합" data-en="Hip-hop">힙합</option>
+                <option value="rock" data-ko="록" data-en="Rock">록</option>
+                <option value="indie" data-ko="인디 팝" data-en="Indie pop">인디 팝</option>
+                <option value="electronic" data-ko="일렉트로닉" data-en="Electronic">일렉트로닉</option>
+                <option value="lofi" data-ko="로파이" data-en="Lo-fi">로파이</option>
+                <option value="jazz" data-ko="재즈" data-en="Jazz">재즈</option>
+                <option value="cinematic" data-ko="시네마틱" data-en="Cinematic">시네마틱</option>
+                <option value="ambient" data-ko="앰비언트" data-en="Ambient">앰비언트</option>
+                <option value="trot" data-ko="트로트" data-en="Trot">트로트</option>
+                <option value="traditional" data-ko="국악 크로스오버" data-en="Korean traditional crossover">국악 크로스오버</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="genre-secondary"><span data-copy="ko">보조 장르</span><span data-copy="en">Secondary genre</span></label>
+              <select id="genre-secondary">
+                <option value="none" data-ko="없음" data-en="None">없음</option>
+                <option value="kpop" data-ko="K-pop" data-en="K-pop">K-pop</option>
+                <option value="pop" data-ko="팝" data-en="Pop">팝</option>
+                <option value="ballad" data-ko="발라드" data-en="Ballad">발라드</option>
+                <option value="rnb" data-ko="R&B" data-en="R&B">R&amp;B</option>
+                <option value="hiphop" data-ko="힙합" data-en="Hip-hop">힙합</option>
+                <option value="rock" data-ko="록" data-en="Rock">록</option>
+                <option value="electronic" data-ko="일렉트로닉" data-en="Electronic">일렉트로닉</option>
+                <option value="jazz" data-ko="재즈" data-en="Jazz">재즈</option>
+                <option value="cinematic" data-ko="시네마틱" data-en="Cinematic">시네마틱</option>
+                <option value="traditional" data-ko="국악 크로스오버" data-en="Korean traditional crossover">국악 크로스오버</option>
+              </select>
+            </div>
+            <div class="field wide hidden" id="genre-blend-field">
+              <div class="range-head"><label for="genre-blend"><span data-copy="ko">장르 비율</span><span data-copy="en">Genre blend</span></label><span class="range-value" id="genre-blend-value">70 : 30</span></div>
+              <input id="genre-blend" type="range" min="50" max="90" step="5" value="70">
+            </div>
+            <div class="field">
+              <label for="mood"><span data-copy="ko">분위기</span><span data-copy="en">Mood</span></label>
+              <select id="mood">
+                <option value="hopeful" data-ko="희망적이고 따뜻함" data-en="Hopeful and warm">희망적이고 따뜻함</option>
+                <option value="bittersweet" data-ko="쓸쓸하지만 아름다움" data-en="Bittersweet and beautiful" selected>쓸쓸하지만 아름다움</option>
+                <option value="bright" data-ko="밝고 경쾌함" data-en="Bright and playful">밝고 경쾌함</option>
+                <option value="romantic" data-ko="로맨틱하고 부드러움" data-en="Romantic and gentle">로맨틱하고 부드러움</option>
+                <option value="dark" data-ko="어둡고 긴장감 있음" data-en="Dark and tense">어둡고 긴장감 있음</option>
+                <option value="dreamy" data-ko="몽환적이고 신비로움" data-en="Dreamy and mysterious">몽환적이고 신비로움</option>
+                <option value="powerful" data-ko="강렬하고 자신감 있음" data-en="Powerful and confident">강렬하고 자신감 있음</option>
+                <option value="calm" data-ko="차분하고 편안함" data-en="Calm and peaceful">차분하고 편안함</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="energy"><span data-copy="ko">에너지</span><span data-copy="en">Energy</span></label>
+              <select id="energy">
+                <option value="low" data-ko="낮음" data-en="Low">낮음</option>
+                <option value="medium" data-ko="중간" data-en="Medium" selected>중간</option>
+                <option value="high" data-ko="높음" data-en="High">높음</option>
+                <option value="dynamic" data-ko="점점 고조됨" data-en="Gradually building">점점 고조됨</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="bpm">BPM</label>
+              <input id="bpm" type="number" min="40" max="220" value="96" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="key"><span data-copy="ko">조성</span><span data-copy="en">Key</span></label>
+              <select id="key">
+                <option value="auto" data-ko="자동 추천" data-en="Recommend automatically">자동 추천</option>
+                <option value="c-major" data-ko="C 장조" data-en="C major">C 장조</option>
+                <option value="g-major" data-ko="G 장조" data-en="G major">G 장조</option>
+                <option value="d-major" data-ko="D 장조" data-en="D major">D 장조</option>
+                <option value="a-minor" data-ko="A 단조" data-en="A minor">A 단조</option>
+                <option value="e-minor" data-ko="E 단조" data-en="E minor">E 단조</option>
+                <option value="d-minor" data-ko="D 단조" data-en="D minor">D 단조</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span data-copy="ko">사운드</span><span data-copy="en">Sound</span></legend>
+          <div class="fields">
+            <div class="field">
+              <label for="beat"><span data-copy="ko">리듬</span><span data-copy="en">Rhythm</span></label>
+              <select id="beat">
+                <option value="steady" data-ko="안정적인 4/4 박자" data-en="Steady 4/4 groove">안정적인 4/4 박자</option>
+                <option value="fourfloor" data-ko="포온더플로어" data-en="Four-on-the-floor">포온더플로어</option>
+                <option value="halftime" data-ko="하프타임 그루브" data-en="Half-time groove">하프타임 그루브</option>
+                <option value="swing" data-ko="스윙" data-en="Swing">스윙</option>
+                <option value="waltz" data-ko="3/4 왈츠" data-en="3/4 waltz">3/4 왈츠</option>
+                <option value="free" data-ko="자유로운 박자" data-en="Free time">자유로운 박자</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="drums"><span data-copy="ko">드럼·퍼커션</span><span data-copy="en">Drums and percussion</span></label>
+              <select id="drums">
+                <option value="acoustic" data-ko="자연스러운 어쿠스틱 드럼" data-en="Natural acoustic drums">자연스러운 어쿠스틱 드럼</option>
+                <option value="electronic" data-ko="선명한 전자 드럼" data-en="Crisp electronic drums">선명한 전자 드럼</option>
+                <option value="soft" data-ko="절제된 소프트 퍼커션" data-en="Restrained soft percussion">절제된 소프트 퍼커션</option>
+                <option value="heavy" data-ko="묵직하고 강한 드럼" data-en="Heavy, punchy drums">묵직하고 강한 드럼</option>
+                <option value="brush" data-ko="브러시 드럼" data-en="Brush drums">브러시 드럼</option>
+                <option value="none" data-ko="드럼 없음" data-en="No drums">드럼 없음</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="main-instrument"><span data-copy="ko">주 악기</span><span data-copy="en">Main instrument</span></label>
+              <select id="main-instrument">
+                <option value="piano" data-ko="피아노" data-en="Piano">피아노</option>
+                <option value="acoustic-guitar" data-ko="어쿠스틱 기타" data-en="Acoustic guitar">어쿠스틱 기타</option>
+                <option value="electric-guitar" data-ko="일렉트릭 기타" data-en="Electric guitar">일렉트릭 기타</option>
+                <option value="synth" data-ko="아날로그 신시사이저" data-en="Analog synthesizer">아날로그 신시사이저</option>
+                <option value="strings" data-ko="스트링 앙상블" data-en="String ensemble">스트링 앙상블</option>
+                <option value="saxophone" data-ko="색소폰" data-en="Saxophone">색소폰</option>
+                <option value="gayageum" data-ko="가야금" data-en="Gayageum">가야금</option>
+                <option value="haegeum" data-ko="해금" data-en="Haegeum">해금</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="support-instrument"><span data-copy="ko">보조 악기</span><span data-copy="en">Supporting instrument</span></label>
+              <select id="support-instrument">
+                <option value="none" data-ko="없음" data-en="None">없음</option>
+                <option value="piano" data-ko="피아노" data-en="Piano">피아노</option>
+                <option value="acoustic-guitar" data-ko="어쿠스틱 기타" data-en="Acoustic guitar">어쿠스틱 기타</option>
+                <option value="electric-guitar" data-ko="일렉트릭 기타" data-en="Electric guitar">일렉트릭 기타</option>
+                <option value="synth" data-ko="신시사이저 패드" data-en="Synth pad">신시사이저 패드</option>
+                <option value="strings" data-ko="스트링" data-en="Strings">스트링</option>
+                <option value="bass" data-ko="베이스 기타" data-en="Bass guitar">베이스 기타</option>
+                <option value="brass" data-ko="브라스" data-en="Brass">브라스</option>
+                <option value="geomungo" data-ko="거문고" data-en="Geomungo">거문고</option>
+              </select>
+            </div>
+            <div class="field wide">
+              <label for="production"><span data-copy="ko">프로덕션 질감</span><span data-copy="en">Production texture</span></label>
+              <select id="production">
+                <option value="modern" data-ko="현대적이고 선명한 스튜디오 사운드" data-en="Modern, clean studio production">현대적이고 선명한 스튜디오 사운드</option>
+                <option value="warm" data-ko="따뜻한 아날로그 질감" data-en="Warm analog texture">따뜻한 아날로그 질감</option>
+                <option value="vintage" data-ko="빈티지하고 거친 질감" data-en="Vintage, lightly gritty texture">빈티지하고 거친 질감</option>
+                <option value="minimal" data-ko="여백이 많은 미니멀 사운드" data-en="Spacious minimal production">여백이 많은 미니멀 사운드</option>
+                <option value="cinematic" data-ko="넓고 극적인 시네마틱 사운드" data-en="Wide, dramatic cinematic production">넓고 극적인 시네마틱 사운드</option>
+                <option value="live" data-ko="라이브 공연 같은 자연스러운 사운드" data-en="Natural live-performance sound">라이브 공연 같은 자연스러운 사운드</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span data-copy="ko">보컬과 가사</span><span data-copy="en">Vocals and lyrics</span></legend>
+          <div class="fields">
+            <div class="field">
+              <label for="vocal-type"><span data-copy="ko">보컬 구성</span><span data-copy="en">Vocal arrangement</span></label>
+              <select id="vocal-type">
+                <option value="female" data-ko="여성 솔로" data-en="Female solo">여성 솔로</option>
+                <option value="male" data-ko="남성 솔로" data-en="Male solo">남성 솔로</option>
+                <option value="duet" data-ko="남녀 듀엣" data-en="Male-female duet">남녀 듀엣</option>
+                <option value="group" data-ko="그룹 보컬" data-en="Group vocals">그룹 보컬</option>
+                <option value="instrumental" data-ko="연주곡" data-en="Instrumental">연주곡</option>
+              </select>
+            </div>
+            <div class="field vocal-only">
+              <label for="vocal-tone"><span data-copy="ko">보컬 톤</span><span data-copy="en">Vocal tone</span></label>
+              <select id="vocal-tone">
+                <option value="clear" data-ko="맑고 또렷함" data-en="Clear and articulate">맑고 또렷함</option>
+                <option value="airy" data-ko="공기감 있고 섬세함" data-en="Airy and delicate">공기감 있고 섬세함</option>
+                <option value="warm" data-ko="따뜻하고 부드러움" data-en="Warm and soft">따뜻하고 부드러움</option>
+                <option value="husky" data-ko="허스키하고 감성적임" data-en="Husky and emotional">허스키하고 감성적임</option>
+                <option value="powerful" data-ko="힘 있고 폭발적임" data-en="Powerful and explosive">힘 있고 폭발적임</option>
+              </select>
+            </div>
+            <div class="field vocal-only">
+              <label for="lyric-language"><span data-copy="ko">가사 언어</span><span data-copy="en">Lyric language</span></label>
+              <select id="lyric-language">
+                <option value="ko" data-ko="한국어" data-en="Korean">한국어</option>
+                <option value="en" data-ko="영어" data-en="English">영어</option>
+                <option value="ko-en" data-ko="한국어 중심 + 영어 후렴" data-en="Mostly Korean with an English hook">한국어 중심 + 영어 후렴</option>
+                <option value="en-ko" data-ko="영어 중심 + 한국어 후렴" data-en="Mostly English with a Korean hook">영어 중심 + 한국어 후렴</option>
+                <option value="none" data-ko="가사 없음" data-en="No lyrics">가사 없음</option>
+              </select>
+            </div>
+            <div class="field vocal-only lyric-only">
+              <label for="lyric-density"><span data-copy="ko">가사 밀도</span><span data-copy="en">Lyric density</span></label>
+              <select id="lyric-density">
+                <option value="sparse" data-ko="짧고 여백 있게" data-en="Sparse, with room to breathe">짧고 여백 있게</option>
+                <option value="medium" data-ko="보통" data-en="Medium" selected>보통</option>
+                <option value="dense" data-ko="촘촘하고 서사적으로" data-en="Dense and narrative">촘촘하고 서사적으로</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="structure"><span data-copy="ko">곡 구성</span><span data-copy="en">Song structure</span></label>
+              <select id="structure">
+                <option value="pop" data-ko="Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus" data-en="Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus">Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus</option>
+                <option value="simple" data-ko="Intro - Verse - Chorus - Verse - Chorus - Outro" data-en="Intro - Verse - Chorus - Verse - Chorus - Outro">Intro - Verse - Chorus - Verse - Chorus - Outro</option>
+                <option value="story" data-ko="Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus" data-en="Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus">Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus</option>
+                <option value="instrumental" data-ko="Intro - A - B - A - Climax - Outro" data-en="Intro - A - B - A - Climax - Outro">Intro - A - B - A - Climax - Outro</option>
+              </select>
+            </div>
+            <div class="field vocal-only lyric-only">
+              <label for="hook"><span data-copy="ko">후렴에 넣을 문구</span><span data-copy="en">Hook phrase</span></label>
+              <input id="hook" type="text" maxlength="100" data-placeholder-ko="비워두면 챗봇이 제안합니다" data-placeholder-en="Leave blank for the chatbot to suggest one">
+            </div>
+            <div class="field wide">
+              <label for="avoid"><span data-copy="ko">피하고 싶은 요소</span><span data-copy="en">Elements to avoid</span></label>
+              <input id="avoid" type="text" maxlength="180" data-placeholder-ko="예: 과도한 오토튠, 긴 인트로, 공격적인 랩" data-placeholder-en="Example: heavy autotune, long intro, aggressive rap">
+            </div>
+            <div class="field wide">
+              <label for="additional"><span data-copy="ko">추가 요청</span><span data-copy="en">Additional requests</span></label>
+              <textarea id="additional" maxlength="500" data-placeholder-ko="꼭 반영하고 싶은 장면, 감정 변화, 사운드 아이디어를 적으세요" data-placeholder-en="Add any scene, emotional arc, or sound idea that must be included"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span data-copy="ko">결과 설정</span><span data-copy="en">Output settings</span></legend>
+          <div class="fields">
+            <div class="field">
+              <label for="command-language"><span data-copy="ko">챗봇 명령 언어</span><span data-copy="en">Command language</span></label>
+              <select id="command-language">
+                <option value="ko" data-ko="한국어" data-en="Korean">한국어</option>
+                <option value="en" data-ko="영어" data-en="English">영어</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="style-language"><span data-copy="ko">스타일 프롬프트 언어</span><span data-copy="en">Style prompt language</span></label>
+              <select id="style-language">
+                <option value="en" data-ko="영어" data-en="English">영어</option>
+                <option value="ko" data-ko="한국어" data-en="Korean">한국어</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+      <aside class="result-shell" aria-live="polite">
+        <div class="result-head">
+          <h2><span data-copy="ko">생성 결과</span><span data-copy="en">Generated result</span></h2>
+          <div class="result-actions">
+            <button class="action-button" id="randomize-button" type="button"><span data-copy="ko">새 조합</span><span data-copy="en">New mix</span></button>
+            <button class="action-button" id="reset-button" type="button"><span data-copy="ko">초기화</span><span data-copy="en">Reset</span></button>
+            <button class="action-button primary" id="download-button" type="button"><span data-copy="ko">TXT 저장</span><span data-copy="en">Save TXT</span></button>
+          </div>
+        </div>
+        <div class="output-block">
+          <div class="output-label"><b><span data-copy="ko">챗봇용 제작 명령</span><span data-copy="en">Production brief for a chatbot</span></b><button class="mini-copy" type="button" data-copy-target="command-output"><span data-copy="ko">복사</span><span data-copy="en">Copy</span></button></div>
+          <textarea class="output" id="command-output" readonly></textarea>
+        </div>
+        <div class="output-block">
+          <div class="output-label"><b><span data-copy="ko">짧은 스타일 프롬프트</span><span data-copy="en">Concise style prompt</span></b><button class="mini-copy" type="button" data-copy-target="style-output"><span data-copy="ko">복사</span><span data-copy="en">Copy</span></button></div>
+          <textarea class="output style-output" id="style-output" readonly></textarea>
+        </div>
+        <div class="result-foot"><span><span data-copy="ko">입력할 때마다 결과가 자동으로 갱신됩니다.</span><span data-copy="en">The result updates whenever you change a setting.</span></span><span class="copy-status" id="copy-status"></span></div>
+      </aside>
+    </div>
+  </main>
+
+  <footer><div class="footer-inner wrap"><span>© 2026 Redsky Factory</span><span>Tools by Redsky Factory</span></div></footer>
+
+  <script>
+    (() => {
+      const form = document.getElementById('prompt-form');
+      const commandOutput = document.getElementById('command-output');
+      const styleOutput = document.getElementById('style-output');
+      const copyStatus = document.getElementById('copy-status');
+      const projectButtons = [...document.querySelectorAll('[data-project]')];
+      const languageButtons = [...document.querySelectorAll('[data-lang-button]')];
+      const trackCountField = document.getElementById('track-count-field');
+      const genreBlendField = document.getElementById('genre-blend-field');
+      const genreBlendValue = document.getElementById('genre-blend-value');
+      const vocalFields = [...document.querySelectorAll('.vocal-only')];
+      const lyricFields = [...document.querySelectorAll('.lyric-only')];
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const storageKey = 'redsky-music-prompt-maker';
+      const languageKey = 'redsky-language';
+      let projectType = 'single';
+      let currentLang = 'ko';
+      let statusTimer = 0;
+
+      const isLanguage = (value) => value === 'ko' || value === 'en';
+      const getCookieDomain = () => {
+        const host = window.location.hostname;
+        return host === 'redskyfactory.com' || host.endsWith('.redskyfactory.com') ? '; Domain=.redskyfactory.com' : '';
+      };
+      const getCookieLanguage = () => {
+        const cookie = document.cookie.split('; ').find((item) => item.startsWith(`${languageKey}=`));
+        if (!cookie) return '';
+        const value = decodeURIComponent(cookie.split('=').slice(1).join('='));
+        return isLanguage(value) ? value : '';
+      };
+      const getSavedLanguage = () => {
+        const cookieLang = getCookieLanguage();
+        if (cookieLang) return cookieLang;
+        try { return isLanguage(localStorage.getItem(languageKey)) ? localStorage.getItem(languageKey) : 'ko'; } catch (_) { return 'ko'; }
+      };
+      const saveLanguage = (lang) => {
+        try { document.cookie = `${languageKey}=${encodeURIComponent(lang)}; Max-Age=31536000; Path=/; SameSite=Lax${getCookieDomain()}`; } catch (_) {}
+        try { localStorage.setItem(languageKey, lang); localStorage.setItem('redskyToolsLang', lang); } catch (_) {}
+      };
+      const control = (id) => document.getElementById(id);
+      const value = (id) => control(id).value;
+      const label = (id, lang) => {
+        const select = control(id);
+        const option = select.options[select.selectedIndex];
+        return option?.dataset?.[lang] || option?.textContent || '';
+      };
+      const textValue = (id) => value(id).trim();
+      const settingIds = ['track-count','theme','purpose','duration','genre-primary','genre-secondary','genre-blend','mood','energy','bpm','key','beat','drums','main-instrument','support-instrument','production','vocal-type','vocal-tone','lyric-language','lyric-density','structure','hook','avoid','additional','command-language','style-language'];
+      const styleMaps = {
+        ko: {
+          genres:{ kpop:'K-pop',pop:'팝',ballad:'발라드',rnb:'R&B',hiphop:'힙합',rock:'록',indie:'인디 팝',electronic:'일렉트로닉',lofi:'로파이',jazz:'재즈',cinematic:'시네마틱',ambient:'앰비언트',trot:'트로트',traditional:'국악 크로스오버' },
+          moods:{ hopeful:'희망적이고 따뜻한',bittersweet:'쓸쓸하지만 아름다운',bright:'밝고 경쾌한',romantic:'로맨틱하고 부드러운',dark:'어둡고 긴장감 있는',dreamy:'몽환적이고 신비로운',powerful:'강렬하고 자신감 있는',calm:'차분하고 편안한' },
+          energies:{ low:'낮은 에너지',medium:'중간 에너지',high:'높은 에너지',dynamic:'점점 고조되는 에너지' },
+        },
+        en: {
+          genres:{ kpop:'K-pop',pop:'pop',ballad:'ballad',rnb:'R&B',hiphop:'hip-hop',rock:'rock',indie:'indie pop',electronic:'electronic',lofi:'lo-fi',jazz:'jazz',cinematic:'cinematic',ambient:'ambient',trot:'trot',traditional:'Korean traditional crossover' },
+          moods:{ hopeful:'hopeful and warm',bittersweet:'bittersweet and beautiful',bright:'bright and playful',romantic:'romantic and gentle',dark:'dark and tense',dreamy:'dreamy and mysterious',powerful:'powerful and confident',calm:'calm and peaceful' },
+          energies:{ low:'low energy',medium:'medium energy',high:'high energy',dynamic:'gradually building energy' },
+        },
+      };
+
+      const updateConditionalFields = () => {
+        trackCountField.classList.toggle('hidden', projectType !== 'album');
+        genreBlendField.classList.toggle('hidden', value('genre-secondary') === 'none');
+        const instrumental = value('vocal-type') === 'instrumental';
+        vocalFields.forEach((field) => field.classList.toggle('hidden', instrumental));
+        const noLyrics = instrumental || value('lyric-language') === 'none';
+        lyricFields.forEach((field) => field.classList.toggle('hidden', noLyrics));
+        const blend = Number(value('genre-blend'));
+        genreBlendValue.textContent = `${blend} : ${100 - blend}`;
+        projectButtons.forEach((button) => {
+          const active = button.dataset.project === projectType;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      };
+      const styleText = (lang) => {
+        const maps = styleMaps[lang];
+        const primary = maps.genres[value('genre-primary')];
+        const secondaryValue = value('genre-secondary');
+        const blend = Number(value('genre-blend'));
+        const genre = secondaryValue === 'none' ? primary : `${primary} ${blend}% + ${maps.genres[secondaryValue]} ${100 - blend}%`;
+        const parts = [genre, maps.moods[value('mood')], maps.energies[value('energy')], `${value('bpm')} BPM`];
+        if (value('key') !== 'auto') parts.push(label('key', lang));
+        parts.push(label('beat', lang), label('main-instrument', lang));
+        if (value('support-instrument') !== 'none') parts.push(label('support-instrument', lang));
+        if (value('drums') !== 'none') parts.push(label('drums', lang));
+        parts.push(label('production', lang));
+        if (value('vocal-type') === 'instrumental') {
+          parts.push(lang === 'ko' ? '보컬 없는 연주곡' : 'instrumental, no vocals');
+        } else {
+          parts.push(label('vocal-type', lang), label('vocal-tone', lang), label('lyric-language', lang));
+        }
+        if (textValue('hook')) parts.push(lang === 'ko' ? `기억에 남는 후렴 “${textValue('hook')}”` : `memorable hook “${textValue('hook')}”`);
+        return parts.filter(Boolean).join(', ');
+      };
+      const commandText = (lang) => {
+        const isKo = lang === 'ko';
+        const instrumental = value('vocal-type') === 'instrumental';
+        const noLyrics = instrumental || value('lyric-language') === 'none';
+        const theme = textValue('theme') || (isKo ? '목적과 장르에 어울리는 주제를 제안해줘' : 'Suggest a theme that fits the purpose and genre');
+        const project = projectType === 'album'
+          ? (isKo ? `${value('track-count')}곡으로 구성된 앨범` : `an album of ${value('track-count')} tracks`)
+          : (isKo ? '싱글 1곡' : 'one single');
+        const lines = isKo ? [
+          '아래 조건을 바탕으로 음악 생성 서비스에서 사용할 제작 패키지를 작성해줘.',
+          '',
+          '[프로젝트]',
+          `- 형식: ${project}`,
+          `- 주제/이야기: ${theme}`,
+          `- 사용 목적: ${label('purpose','ko')}`,
+          `- 목표 길이: ${label('duration','ko')}`,
+          '',
+          '[음악 방향]',
+          `- 스타일: ${styleText('ko')}`,
+          `- 곡 구성: ${label('structure','ko')}`,
+          ...(noLyrics ? [] : [`- 가사 밀도: ${label('lyric-density','ko')}`]),
+          ...(textValue('avoid') ? [`- 피할 요소: ${textValue('avoid')}`] : []),
+          ...(textValue('additional') ? [`- 추가 요청: ${textValue('additional')}`] : []),
+          '',
+          '[결과 형식]',
+          projectType === 'album' ? `1. 앨범 전체의 콘셉트와 ${value('track-count')}개 트랙 제목·개별 주제` : '1. 곡 제목 후보 3개와 한 줄 콘셉트',
+          noLyrics
+            ? '2. 섹션별 편곡과 악기·보컬 전개 계획'
+            : (projectType === 'album'
+              ? '2. 각 트랙마다 [Intro], [Verse], [Chorus], [Bridge], [Outro] 같은 구조 태그가 포함된 완성 가사'
+              : '2. [Intro], [Verse], [Chorus], [Bridge], [Outro] 같은 구조 태그가 포함된 완성 가사'),
+          '3. 음악 생성 서비스의 Style 입력란에 붙여넣을 간결한 영어 스타일 프롬프트',
+          '4. Exclude Styles 또는 피해야 할 소리 목록',
+          '5. 추천 BPM, 조성, 보컬·연주 지시와 생성 시 주의점',
+          '',
+          '표현은 구체적으로 작성하고, 실존 가수나 기존 곡을 그대로 모방하도록 요청하지 마. 설정이 충돌하면 주제, 주 장르, 분위기 순서로 우선해줘.'
+        ] : [
+          'Create a complete production package for a music-generation service using the brief below.',
+          '',
+          '[Project]',
+          `- Format: ${project}`,
+          `- Theme/story: ${theme}`,
+          `- Purpose: ${label('purpose','en')}`,
+          `- Target length: ${label('duration','en')}`,
+          '',
+          '[Music direction]',
+          `- Style: ${styleText('en')}`,
+          `- Song structure: ${label('structure','en')}`,
+          ...(noLyrics ? [] : [`- Lyric density: ${label('lyric-density','en')}`]),
+          ...(textValue('avoid') ? [`- Avoid: ${textValue('avoid')}`] : []),
+          ...(textValue('additional') ? [`- Additional request: ${textValue('additional')}`] : []),
+          '',
+          '[Deliverables]',
+          projectType === 'album' ? `1. An overall album concept plus titles and individual themes for all ${value('track-count')} tracks` : '1. Three title options and a one-sentence concept',
+          noLyrics
+            ? '2. A section-by-section arrangement, instrumentation, and vocalization plan'
+            : (projectType === 'album'
+              ? '2. Complete lyrics for every track using clear tags such as [Intro], [Verse], [Chorus], [Bridge], and [Outro]'
+              : '2. Complete lyrics using clear tags such as [Intro], [Verse], [Chorus], [Bridge], and [Outro]'),
+          '3. A concise English Style prompt ready for a music generator',
+          '4. An Exclude Styles list',
+          '5. Recommended BPM, key, vocal/performance direction, and generation notes',
+          '',
+          'Be specific, but do not ask for a direct imitation of any living artist or existing song. If settings conflict, prioritize the theme, primary genre, and mood in that order.'
+        ];
+        return lines.join('\n');
+      };
+      const saveState = () => {
+        const data = { projectType };
+        settingIds.forEach((id) => { data[id] = value(id); });
+        try { localStorage.setItem(storageKey, JSON.stringify(data)); } catch (_) {}
+      };
+      const loadState = () => {
+        try {
+          const data = JSON.parse(localStorage.getItem(storageKey) || 'null');
+          if (!data) return;
+          projectType = data.projectType === 'album' ? 'album' : 'single';
+          settingIds.forEach((id) => {
+            if (data[id] != null && control(id)) control(id).value = data[id];
+          });
+        } catch (_) {}
+      };
+      const refresh = () => {
+        updateConditionalFields();
+        commandOutput.value = commandText(value('command-language'));
+        const styleLang = value('style-language');
+        const avoidText = textValue('avoid');
+        styleOutput.value = `${styleText(styleLang)}${avoidText ? `\n\n${styleLang === 'ko' ? '제외' : 'Exclude'}: ${avoidText}` : ''}`;
+        saveState();
+      };
+      const updateLocalizedControls = () => {
+        document.querySelectorAll('option[data-ko][data-en]').forEach((option) => { option.textContent = option.dataset[currentLang]; });
+        document.querySelectorAll('[data-placeholder-ko][data-placeholder-en]').forEach((element) => { element.placeholder = element.dataset[`placeholder${currentLang === 'ko' ? 'Ko' : 'En'}`]; });
+      };
+      const setLanguage = (lang) => {
+        currentLang = isLanguage(lang) ? lang : 'ko';
+        document.body.dataset.lang = currentLang;
+        document.documentElement.lang = currentLang;
+        document.title = currentLang === 'ko' ? '음악 생성 프롬프트 메이커 | Redsky Factory Tools' : 'Music Prompt Maker | Redsky Factory Tools';
+        if (metaDescription) metaDescription.content = currentLang === 'ko'
+          ? '장르, 분위기, 악기, 보컬과 곡 구성을 조합해 음악 생성용 프롬프트를 만드는 브라우저 도구입니다.'
+          : 'Build detailed music-generation prompts from genre, mood, instruments, vocals, and song structure.';
+        saveLanguage(currentLang);
+        languageButtons.forEach((button) => {
+          const active = button.dataset.langButton === currentLang;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        updateLocalizedControls();
+      };
+      const showCopyStatus = () => {
+        clearTimeout(statusTimer);
+        copyStatus.textContent = currentLang === 'ko' ? '복사했습니다.' : 'Copied.';
+        statusTimer = setTimeout(() => { copyStatus.textContent = ''; }, 1800);
+      };
+      const copyText = async (text) => {
+        try { await navigator.clipboard.writeText(text); }
+        catch (_) {
+          const temp = document.createElement('textarea');
+          temp.value = text;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          temp.remove();
+        }
+        showCopyStatus();
+      };
+      const randomize = () => {
+        const pick = (id) => {
+          const select = control(id);
+          const choices = [...select.options].filter((option) => option.value !== 'none' && option.value !== 'auto');
+          select.value = choices[Math.floor(Math.random() * choices.length)].value;
+        };
+        ['genre-primary','mood','energy','beat','drums','main-instrument','support-instrument','production','vocal-type','vocal-tone','structure'].forEach(pick);
+        control('bpm').value = Math.round((72 + Math.random() * 68) / 2) * 2;
+        refresh();
+      };
+      const resetForm = () => {
+        form.reset();
+        projectType = 'single';
+        try { localStorage.removeItem(storageKey); } catch (_) {}
+        refresh();
+      };
+      const downloadText = () => {
+        const content = `${currentLang === 'ko' ? '챗봇용 제작 명령' : 'Production brief'}\n\n${commandOutput.value}\n\n${currentLang === 'ko' ? '짧은 스타일 프롬프트' : 'Concise style prompt'}\n\n${styleOutput.value}`;
+        const blob = new Blob([content], { type:'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'music-prompt.txt';
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+
+      form.addEventListener('input', refresh);
+      form.addEventListener('change', refresh);
+      projectButtons.forEach((button) => button.addEventListener('click', () => { projectType = button.dataset.project; refresh(); }));
+      languageButtons.forEach((button) => button.addEventListener('click', () => { setLanguage(button.dataset.langButton); refresh(); }));
+      document.querySelectorAll('[data-copy-target]').forEach((button) => button.addEventListener('click', () => copyText(control(button.dataset.copyTarget).value)));
+      document.getElementById('randomize-button').addEventListener('click', randomize);
+      document.getElementById('reset-button').addEventListener('click', resetForm);
+      document.getElementById('download-button').addEventListener('click', downloadText);
+      loadState();
+      setLanguage(getSavedLanguage());
+      refresh();
+      window.addEventListener('pageshow', () => {
+        const saved = getSavedLanguage();
+        if (saved !== currentLang) { setLanguage(saved); refresh(); }
+      });
+      window.addEventListener('focus', () => {
+        const saved = getSavedLanguage();
+        if (saved !== currentLang) { setLanguage(saved); refresh(); }
+      });
+    })();
+  </script>
+</body>
+</html>
