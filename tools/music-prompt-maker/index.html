@@ -46,6 +46,9 @@
     .field { display:grid; gap:7px; min-width:0; }
     .field.wide { grid-column:1 / -1; }
     label,.field-label { color:var(--muted); font-size:12px; font-weight:780; }
+    .label-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .field-action { min-height:28px; padding:0 10px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--red-dark); cursor:pointer; font-size:11px; font-weight:820; }
+    .field-action:hover { border-color:var(--red); background:white; }
     input,select,textarea { width:100%; border:1px solid var(--line); border-radius:10px; background:white; color:var(--ink); outline:none; }
     input,select { min-height:44px; padding:0 12px; }
     textarea { min-height:88px; padding:12px; resize:vertical; line-height:1.55; }
@@ -67,7 +70,8 @@
     .output-block:last-of-type { border-bottom:0; }
     .output-label { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:9px; }
     .output-label b { font-size:13px; }
-    .mini-copy { border:0; background:none; cursor:pointer; color:var(--red-dark); font-size:11px; font-weight:820; }
+    .mini-copy { min-width:76px; min-height:38px; padding:0 16px; border:1px solid var(--ink); border-radius:9px; background:var(--ink); color:white; cursor:pointer; font-size:13px; font-weight:850; }
+    .mini-copy:hover { border-color:var(--red-dark); background:var(--red-dark); }
     .output { min-height:290px; margin:0; padding:15px; border:1px solid var(--line); border-radius:12px; background:#fffefa; color:#2a2d2a; font-family:"Noto Sans KR",Inter,sans-serif; font-size:12px; line-height:1.7; resize:vertical; }
     .output.style-output { min-height:120px; }
     .result-foot { display:flex; justify-content:space-between; gap:14px; padding:15px 22px; background:var(--soft); color:var(--muted); font-size:11px; line-height:1.55; }
@@ -219,7 +223,10 @@
               </select>
             </div>
             <div class="field">
-              <label for="bpm">BPM</label>
+              <div class="label-row">
+                <label for="bpm">BPM</label>
+                <button class="field-action" id="bpm-random-button" type="button"><span data-copy="ko">랜덤</span><span data-copy="en">Random</span></button>
+              </div>
               <input id="bpm" type="number" min="40" max="220" value="96" inputmode="numeric">
             </div>
             <div class="field">
@@ -347,10 +354,10 @@
             <div class="field">
               <label for="structure"><span data-copy="ko">곡 구성</span><span data-copy="en">Song structure</span></label>
               <select id="structure">
-                <option value="pop" data-ko="Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus" data-en="Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus">Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus</option>
-                <option value="simple" data-ko="Intro - Verse - Chorus - Verse - Chorus - Outro" data-en="Intro - Verse - Chorus - Verse - Chorus - Outro">Intro - Verse - Chorus - Verse - Chorus - Outro</option>
-                <option value="story" data-ko="Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus" data-en="Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus">Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus</option>
-                <option value="instrumental" data-ko="Intro - A - B - A - Climax - Outro" data-en="Intro - A - B - A - Climax - Outro">Intro - A - B - A - Climax - Outro</option>
+                <option value="pop" data-ko="도입 - 1절 - 전후렴 - 후렴 - 2절 - 후렴 - 연결부 - 마지막 후렴" data-en="Intro - Verse - Pre-Chorus - Chorus - Verse - Chorus - Bridge - Final Chorus">도입 - 1절 - 전후렴 - 후렴 - 2절 - 후렴 - 연결부 - 마지막 후렴</option>
+                <option value="simple" data-ko="도입 - 1절 - 후렴 - 2절 - 후렴 - 마무리" data-en="Intro - Verse - Chorus - Verse - Chorus - Outro">도입 - 1절 - 후렴 - 2절 - 후렴 - 마무리</option>
+                <option value="story" data-ko="도입 - 1절 - 2절 - 후렴 - 연결부 - 마지막 후렴" data-en="Intro - Verse 1 - Verse 2 - Chorus - Bridge - Final Chorus">도입 - 1절 - 2절 - 후렴 - 연결부 - 마지막 후렴</option>
+                <option value="instrumental" data-ko="도입 - A 부분 - B 부분 - A 부분 - 절정 - 마무리" data-en="Intro - A - B - A - Climax - Outro">도입 - A 부분 - B 부분 - A 부분 - 절정 - 마무리</option>
               </select>
             </div>
             <div class="field vocal-only lyric-only">
@@ -637,6 +644,7 @@
         }
         showCopyStatus();
       };
+      const randomBpmValue = () => Math.floor(Math.random() * 121) + 60;
       const randomize = () => {
         const pick = (id) => {
           const select = control(id);
@@ -644,7 +652,11 @@
           select.value = choices[Math.floor(Math.random() * choices.length)].value;
         };
         ['genre-primary','mood','energy','beat','drums','main-instrument','support-instrument','production','vocal-type','vocal-tone','structure'].forEach(pick);
-        control('bpm').value = Math.round((72 + Math.random() * 68) / 2) * 2;
+        control('bpm').value = randomBpmValue();
+        refresh();
+      };
+      const randomizeBpm = () => {
+        control('bpm').value = randomBpmValue();
         refresh();
       };
       const resetForm = () => {
@@ -670,6 +682,7 @@
       languageButtons.forEach((button) => button.addEventListener('click', () => { setLanguage(button.dataset.langButton); refresh(); }));
       document.querySelectorAll('[data-copy-target]').forEach((button) => button.addEventListener('click', () => copyText(control(button.dataset.copyTarget).value)));
       document.getElementById('randomize-button').addEventListener('click', randomize);
+      document.getElementById('bpm-random-button').addEventListener('click', randomizeBpm);
       document.getElementById('reset-button').addEventListener('click', resetForm);
       document.getElementById('download-button').addEventListener('click', downloadText);
       loadState();
