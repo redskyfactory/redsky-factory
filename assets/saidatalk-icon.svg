@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" role="img" aria-labelledby="title desc">
+  <title id="title">사이다톡 아이콘</title>
+  <desc id="desc">연한 하늘색 원 안에 검은 테두리의 흰색 말풍선이 있는 아이콘</desc>
+  <path fill="#DDF8FF" d="M54 4a50 50 0 1 0 0 100A50 50 0 1 0 54 4Z"/>
+  <path fill="#fff" stroke="#000" stroke-linejoin="round" stroke-width="4" d="M30 27h48c7 0 12 5 12 12v25c0 7-5 12-12 12H59L44 88V76H30c-7 0-12-5-12-12V39c0-7 5-12 12-12Z"/>
+  <path fill="#000" d="M34 47a5 5 0 1 0 0 10 5 5 0 1 0 0-10Zm20 0a5 5 0 1 0 0 10 5 5 0 1 0 0-10Zm20 0a5 5 0 1 0 0 10 5 5 0 1 0 0-10Z"/>
+</svg>
