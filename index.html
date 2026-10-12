@@ -100,13 +100,13 @@
     .section-intro { margin: 0; max-width: 480px; justify-self: end; color: var(--muted); font-size: 15px; line-height: 1.75; }
     .app-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
     .app-card { min-height: 0; display: flex; flex-direction: column; padding: 34px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
-    .app-card-upcoming { grid-column: 1 / -1; min-height: 320px; }
     .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
     .card-identity { min-width: 0; display: flex; align-items: center; gap: 16px; }
     .card-identity > div { min-width: 0; }
     .app-icon { width: 52px; height: 52px; display: block; object-fit: cover; border-radius: 15px; box-shadow: 0 6px 16px rgba(23, 25, 23, .14); }
     .app-icon-placeholder { display: grid; place-items: center; background: #72a75e; color: white; font-size: 16px; font-weight: 850; }
     .status { padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; color: var(--muted); }
+    .status.released { border-color: rgba(76, 128, 96, .25); background: rgba(76, 128, 96, .1); color: #4c8060; }
     .status.upcoming { border-color: rgba(169, 47, 33, .22); background: rgba(216, 73, 54, .07); color: var(--red-dark); }
     .app-card h3 { margin: 0 0 4px; font-size: 28px; letter-spacing: -.04em; }
     .app-type { display: block; color: var(--red-dark); font-size: 13px; font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
@@ -283,14 +283,14 @@
 
         <div class="app-grid">
           <article class="app-card">
-            <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/melodywave-icon.png" alt="MelodyWave 앱 아이콘" width="52" height="52"><div><h3>MelodyWave</h3><span class="app-type"><span data-copy="ko">오프라인 음악 플레이어</span><span data-copy="en">Offline music player</span></span></div></div><span class="status"><span data-copy="ko">출시됨</span><span data-copy="en">Released</span></span></div>
+            <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/melodywave-icon.png" alt="MelodyWave 앱 아이콘" width="52" height="52"><div><h3>MelodyWave</h3><span class="app-type"><span data-copy="ko">오프라인 음악 플레이어</span><span data-copy="en">Offline music player</span></span></div></div><span class="status released"><span data-copy="ko">출시됨</span><span data-copy="en">Released</span></span></div>
             <p class="app-desc" data-copy="ko">기기에 저장된 음악을 폴더별로 찾아 재생할 수 있는 Android 음악 플레이어입니다. 5밴드 이퀄라이저와 백그라운드 재생을 지원합니다.</p>
             <p class="app-desc" data-copy="en">An Android music player that lets you browse and play music stored on your device by folder. It features a 5-band equalizer and background playback.</p>
             <div class="card-foot"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.redskyfactory.musicplayer" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a><span class="meta">Android</span></div>
           </article>
 
           <article class="app-card">
-            <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/onepic-icon.svg" alt="OnePic 앱 아이콘" width="52" height="52"><div><h3>OnePic</h3><span class="app-type"><span data-copy="ko">사진 갤러리</span><span data-copy="en">Photo gallery</span></span></div></div><span class="status"><span data-copy="ko">출시됨</span><span data-copy="en">Released</span></span></div>
+            <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/onepic-icon.svg" alt="OnePic 앱 아이콘" width="52" height="52"><div><h3>OnePic</h3><span class="app-type"><span data-copy="ko">사진 갤러리</span><span data-copy="en">Photo gallery</span></span></div></div><span class="status released"><span data-copy="ko">출시됨</span><span data-copy="en">Released</span></span></div>
             <p class="app-desc" data-copy="ko">휴대전화에 저장된 사진을 둘러보고 정리할 수 있는 Android 갤러리 앱입니다.</p>
             <p class="app-desc" data-copy="en">An Android gallery app for browsing and organizing photos stored on your phone.</p>
             <div class="card-foot"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.onepic.gallery" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a><span class="meta">Android</span></div>
@@ -303,7 +303,7 @@
             <div class="card-foot"><span class="upcoming-label"><span data-copy="ko">준비 중</span><span data-copy="en">In progress</span></span><span class="meta">Android</span></div>
           </article>
 
-          <article class="app-card app-card-upcoming">
+          <article class="app-card">
             <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/saidatalk-icon.svg" alt="사이다톡 앱 아이콘" width="52" height="52"><div><h3><span data-copy="ko">사이다톡</span><span data-copy="en">SaidaTalk</span></h3><span class="app-type"><span data-copy="ko">Android 개인 프로젝트</span><span data-copy="en">Personal Android project</span></span></div></div><span class="status upcoming"><span data-copy="ko">개인 프로젝트</span><span data-copy="en">Personal project</span></span></div>
             <p class="app-desc" data-copy="ko">상용 서비스 수준의 보안 시스템을 구축할 수 없어 정식 출시 없이 개인 프로젝트로 남깁니다.</p>
             <p class="app-desc" data-copy="en">Because we cannot build the security infrastructure required for a commercial service, SaidaTalk will remain a personal project rather than being released publicly.</p>
