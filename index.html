@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Redsky Factory의 Android 앱 MelodyWave와 OnePic을 소개합니다.">
-  <meta name="theme-color" content="#f4f1eb">
+  <meta name="theme-color" content="#FFFFFF">
   <link rel="canonical" href="https://redskyfactory.com/">
   <link rel="icon" href="/assets/redsky-symbol.png" type="image/png">
   <meta property="og:type" content="website">
@@ -24,16 +24,17 @@
   <meta name="twitter:description" content="일상에서 편리하게 사용할 수 있는 Android 앱을 만듭니다.">
   <meta name="twitter:image" content="https://redskyfactory.com/assets/redsky-social-preview.jpg">
   <title>Redsky Factory — Android 앱 스튜디오</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <style>
     :root {
-      --paper: #f4f1eb;
-      --surface: #fbfaf7;
-      --ink: #171917;
-      --muted: #686b65;
-      --line: rgba(23, 25, 23, .13);
-      --red: #d84936;
-      --red-dark: #a92f21;
-      --green: #7d9a78;
+      --bg: #FFFFFF;
+      --bg-soft: #F7F8FA;
+      --surface: #FFFFFF;
+      --ink: #111827;
+      --muted: #6B7280;
+      --line: #E5E7EB;
+      --accent: #D84936;
+      --accent-soft: #FDECEA;
       --max: 1120px;
     }
 
@@ -41,192 +42,163 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: var(--paper);
+      overflow-x: hidden;
+      background: var(--bg);
       color: var(--ink);
-      font-family: Inter, Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Pretendard, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
       -webkit-font-smoothing: antialiased;
     }
     body[data-lang="ko"] { word-break: keep-all; }
     button, a { font: inherit; }
     a { color: inherit; }
     button { color: inherit; }
-    :focus-visible { outline: 3px solid rgba(216, 73, 54, .3); outline-offset: 4px; }
+    :focus-visible { outline: 3px solid rgba(216, 73, 54, .28); outline-offset: 4px; }
 
-    .wrap { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+    .wrap { width: min(calc(100% - 48px), var(--max)); margin-inline: auto; }
     .skip {
-      position: fixed; left: 16px; top: -60px; z-index: 100;
-      padding: 10px 14px; border-radius: 8px; background: var(--ink); color: white;
+      position: fixed; left: 16px; top: -64px; z-index: 100;
+      padding: 8px 16px; border-radius: 10px; background: var(--ink); color: white;
     }
     .skip:focus { top: 16px; }
 
     header {
       position: sticky; top: 0; z-index: 20;
-      background: rgba(244, 241, 235, .88);
+      background: rgba(255, 255, 255, .9);
       border-bottom: 1px solid transparent;
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
     }
     header.scrolled { border-bottom-color: var(--line); }
-    .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; letter-spacing: -.03em; }
-    .brand-logo { width: 40px; height: 30px; display: block; object-fit: contain; }
+    .nav { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 16px; text-decoration: none; font-weight: 600; letter-spacing: -.02em; }
+    .brand-logo { width: 40px; height: 32px; display: block; object-fit: contain; }
     .nav-right, .lang { display: flex; align-items: center; }
     .nav-right { gap: 24px; }
-    .tools-link, .contact-link { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); text-decoration: none; font-size: 13px; font-weight: 750; transition: border-color .18s ease, background .18s ease; }
-    .tools-link:hover, .contact-link:hover { border-color: rgba(23, 25, 23, .34); background: white; }
-    .lang { padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: rgba(251, 250, 247, .7); }
-    .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 760; }
+    .nav-link { display: inline-flex; align-items: center; min-height: 32px; padding: 8px 0; border: 0; background: transparent; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .18s ease; }
+    .nav-link:hover { color: var(--ink); }
+    .lang { gap: 8px; padding: 0; }
+    .lang button { border: 0; background: transparent; padding: 8px; border-radius: 999px; cursor: pointer; color: var(--muted); font-size: 14px; font-weight: 600; }
     .lang button.active { background: var(--ink); color: white; }
 
-    .hero { padding: 92px 0 104px; }
-    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr); align-items: center; gap: 72px; }
-    .eyebrow { display: flex; align-items: center; gap: 9px; margin-bottom: 24px; color: var(--red-dark); font-size: 13px; font-weight: 700; }
-    .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
-    h1 { margin: 0; max-width: 680px; font-size: clamp(48px, 7vw, 82px); line-height: .98; letter-spacing: -.065em; font-weight: 760; }
-    body[data-lang="ko"] h1 { font-size: clamp(44px, 6.5vw, 72px); line-height: 1.12; letter-spacing: -.055em; }
-    .hero-copy { max-width: 550px; margin: 28px 0 0; color: var(--muted); font-size: 17px; line-height: 1.75; }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
-    .button { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; padding: 0 19px; border: 1px solid var(--ink); border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 700; transition: transform .18s ease, background .18s ease; }
+    .hero { min-height: calc(70vh - 64px); display: flex; align-items: center; padding: 96px 0; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); align-items: center; gap: 64px; }
+    .eyebrow { display: inline-flex; align-items: center; margin: 0 0 24px; padding: 8px 16px; border-radius: 999px; background: var(--bg-soft); color: var(--muted); font-size: 14px; font-weight: 600; }
+    h1 { margin: 0; max-width: 680px; font-size: clamp(36px, 5vw, 56px); line-height: 1.15; letter-spacing: -.03em; font-weight: 700; }
+    .hero-copy { max-width: 560px; margin: 24px 0 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+    .button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 24px; border: 1px solid var(--ink); border-radius: 10px; text-decoration: none; font-size: 16px; font-weight: 600; transition: background .18s ease, color .18s ease, transform .18s ease; }
     .button:hover { transform: translateY(-2px); }
     .button.primary { background: var(--ink); color: white; }
+    .button.secondary { background: var(--surface); color: var(--ink); }
+    .button.secondary:hover { background: var(--bg-soft); }
+    .hero-media { display: flex; justify-content: center; }
+    .hero-phone { width: min(100%, 360px); height: auto; display: block; border-radius: 24px; box-shadow: 0 8px 24px rgba(17, 24, 39, .08); }
 
-    .hero-mark { position: relative; min-height: 520px; display: grid; place-items: center; isolation: isolate; }
-    .hero-mark::before { content: ""; position: absolute; width: min(92%, 430px); aspect-ratio: 1; border-radius: 50%; background: #e6ded2; z-index: -1; }
-    .hero-symbol { width: min(82%, 390px); height: auto; display: block; filter: drop-shadow(0 24px 32px rgba(34, 31, 27, .13)); }
-
-    .section { padding: 104px 0; border-top: 1px solid var(--line); }
-    .section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; margin-bottom: 44px; }
-    .kicker { margin: 0 0 12px; color: var(--red-dark); font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-    h2 { margin: 0; font-size: clamp(34px, 5vw, 56px); line-height: 1.08; letter-spacing: -.05em; }
-    .section-intro { margin: 0; max-width: 480px; justify-self: end; color: var(--muted); font-size: 15px; line-height: 1.75; }
-    .app-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .app-card { min-height: 0; display: flex; flex-direction: column; padding: 34px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
-    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+    .section { padding: 96px 0; }
+    .section-soft { background: var(--bg-soft); }
+    .section-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 420px); gap: 32px; align-items: end; margin-bottom: 48px; }
+    .kicker { margin: 0 0 16px; color: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    h2 { margin: 0; font-size: clamp(28px, 3.5vw, 40px); line-height: 1.2; letter-spacing: -.03em; font-weight: 700; }
+    .section-intro { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .app-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .app-card { min-height: 0; display: flex; flex-direction: column; padding: 32px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); transition: box-shadow .18s ease, transform .18s ease; }
+    .app-card:hover { box-shadow: 0 8px 24px rgba(17, 24, 39, .08); }
+    .app-card.compact { padding: 24px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
     .card-identity { min-width: 0; display: flex; align-items: center; gap: 16px; }
     .card-identity > div { min-width: 0; }
-    .app-icon { width: 52px; height: 52px; display: block; object-fit: cover; border-radius: 15px; box-shadow: 0 6px 16px rgba(23, 25, 23, .14); }
-    .app-icon-placeholder { display: grid; place-items: center; background: #72a75e; color: white; font-size: 16px; font-weight: 850; }
-    .status { padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; color: var(--muted); }
-    .status.released { border-color: rgba(76, 128, 96, .25); background: rgba(76, 128, 96, .1); color: #4c8060; }
-    .status.upcoming { border-color: rgba(169, 47, 33, .22); background: rgba(216, 73, 54, .07); color: var(--red-dark); }
-    .app-card h3 { margin: 0 0 4px; font-size: 28px; letter-spacing: -.04em; }
-    .app-type { display: block; color: var(--red-dark); font-size: 13px; font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
-    .app-desc { max-width: 470px; margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.75; }
-    .card-foot { display: flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 24px; }
-    .store-link { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 0 13px; border-radius: 10px; background: var(--ink); color: white; text-decoration: none; font-size: 13px; font-weight: 750; transition: transform .18s ease, background .18s ease; }
-    .store-link:hover { transform: translateY(-2px); background: #2c302d; }
-    .store-link::after { content: "↗"; font-size: 13px; }
-    .upcoming-label { display: inline-flex; align-items: center; min-height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); font-size: 13px; font-weight: 750; }
-    .meta { color: var(--muted); font-size: 13px; }
-    .future-note { margin: 24px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; text-align: center; }
+    .app-icon { width: 56px; height: 56px; display: block; flex: 0 0 auto; object-fit: cover; border-radius: 14px; }
+    .status { flex: 0 0 auto; padding: 8px 16px; border: 1px solid transparent; border-radius: 999px; font-size: 14px; line-height: 1.4; font-weight: 600; }
+    .status.released { border-color: #A7F3D0; background: #ECFDF5; color: #047857; }
+    .status.upcoming { border-color: #FDE68A; background: #FFFBEB; color: #B45309; }
+    .status.not-released { border-color: var(--line); background: #F3F4F6; color: #6B7280; }
+    .app-card h3 { margin: 0 0 8px; font-size: 20px; line-height: 1.3; letter-spacing: -.02em; font-weight: 600; }
+    .app-type { display: block; color: var(--muted); font-size: 14px; line-height: 1.5; font-weight: 500; }
+    .app-desc { max-width: 520px; margin: 24px 0 0; color: var(--muted); font-size: 16px; line-height: 1.7; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+    .card-foot { display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: 32px; }
+    .store-link { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 16px; border-radius: 10px; background: var(--ink); color: white; text-decoration: none; font-size: 14px; font-weight: 600; transition: transform .18s ease, background .18s ease; }
+    .store-link:hover { transform: translateY(-2px); background: #1F2937; }
+    .store-link::after { content: "↗"; font-size: 14px; }
+    .upcoming-label { display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); font-size: 14px; font-weight: 600; }
+    .meta { color: var(--muted); font-size: 14px; }
+    .subsection-head { margin: 64px 0 24px; }
+    .subsection-head h3 { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 600; }
 
-    .melody-showcase { background: #eeedf3; }
-    .showcase-shell {
-      position: relative;
-      overflow: hidden;
-      padding: clamp(30px, 5vw, 58px);
-      border-radius: 34px;
-      background:
-        radial-gradient(circle at 90% 5%, rgba(135, 61, 255, .12), transparent 34%),
-        radial-gradient(circle at 5% 38%, rgba(24, 211, 218, .1), transparent 30%),
-        #eeedf3;
-      color: var(--ink);
-      border: 1px solid rgba(23, 25, 23, .08);
-      box-shadow: 0 30px 70px rgba(45, 42, 54, .1);
-    }
-    .showcase-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 44px; }
-    .showcase-head h2 { max-width: 690px; }
-    .showcase-copy { max-width: 590px; margin: 20px 0 0; color: var(--muted); font-size: 15px; line-height: 1.75; }
-    .showcase-shell .kicker { color: #7b4bb7; }
-    .showcase-shell .store-link { min-height: 44px; padding-inline: 16px; background: var(--ink); color: white; white-space: nowrap; }
-    .showcase-shell .store-link:hover { background: #2c302d; }
-    .showcase-overview {
-      margin: 44px 0 18px;
-      overflow: hidden;
-      border: 1px solid rgba(23,25,23,.12);
-      border-radius: 22px;
-      background: #f8f7fb;
-    }
-    .showcase-overview img, .showcase-shot img { width: 100%; height: auto; display: block; }
-    .showcase-gallery { width: min(100%, 820px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 0 auto; }
-    .showcase-shot {
-      overflow: hidden;
-      margin: 0;
-      border: 1px solid rgba(23,25,23,.12);
-      border-radius: 20px;
-      background: #f8f7fb;
-    }
-    .showcase-shot.wide { grid-column: 1 / -1; }
-    .showcase-shot figcaption { padding: 14px 16px 15px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .showcase-layout { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); align-items: center; gap: 64px; }
+    .showcase-copy { max-width: 520px; margin: 24px 0 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .showcase-actions { margin-top: 32px; }
+    .showcase-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .showcase-shot { overflow: hidden; margin: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .showcase-shot img { width: 100%; aspect-ratio: 9 / 16; height: auto; display: block; object-fit: cover; object-position: top; }
+    .showcase-shot figcaption { padding: 16px; color: var(--muted); font-size: 14px; line-height: 1.5; }
 
-    .about-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: 90px; }
-    .about-copy { margin: 22px 0 0; color: var(--muted); line-height: 1.8; }
-    .principles { border-top: 1px solid var(--line); }
-    .principle { display: grid; grid-template-columns: 50px 1fr; gap: 18px; padding: 28px 0; border-bottom: 1px solid var(--line); }
-    .principle b { color: var(--red-dark); font-size: 13px; }
-    .principle h3 { margin: 0 0 8px; font-size: 18px; }
-    .principle p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .about-intro { max-width: 680px; margin-bottom: 48px; }
+    .about-copy { max-width: 640px; margin: 24px 0 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; }
+    .principle { min-width: 0; }
+    .principle b { display: block; margin-bottom: 16px; color: var(--accent); font-size: 14px; font-weight: 700; }
+    .principle h3 { margin: 0 0 16px; font-size: 18px; line-height: 1.4; font-weight: 600; }
+    .principle p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
 
-    .contact { padding: 90px 0 34px; border-radius: 32px 32px 0 0; background: var(--ink); color: white; }
-    .contact-grid { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px; }
-    .contact h2 { max-width: 700px; }
-    .contact p { margin: 18px 0 0; color: rgba(255,255,255,.62); line-height: 1.75; }
-    .contact-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
-    .email { display: inline-flex; align-items: center; min-height: 50px; padding: 0 18px; border-radius: 12px; background: white; color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 750; cursor: pointer; user-select: text; -webkit-user-select: text; }
-    .contact-form-link { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 18px; border: 1px solid rgba(255,255,255,.24); border-radius: 12px; color: white; text-decoration: none; font-size: 14px; font-weight: 750; }
-    .contact-form-link:hover { border-color: rgba(255,255,255,.55); }
-    footer { display: flex; justify-content: space-between; gap: 24px; margin-top: 78px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.42); font-size: 12px; line-height: 1.6; }
+    .contact { padding: 96px 0; background: var(--bg-soft); }
+    .contact-card { max-width: 800px; margin: 0 auto; padding: 64px 48px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); text-align: center; }
+    .contact h2 { max-width: 640px; margin-inline: auto; }
+    .contact p { max-width: 640px; margin: 24px auto 0; color: var(--muted); line-height: 1.7; }
+    .contact-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 32px; }
+    .email, .contact-form-link { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 10px; text-decoration: none; font-size: 16px; font-weight: 600; }
+    .email { border: 1px solid var(--ink); background: var(--ink); color: white; cursor: pointer; user-select: text; -webkit-user-select: text; }
+    .contact-form-link { border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+    .contact-form-link:hover { background: var(--bg-soft); }
+    footer { padding: 32px 0 48px; border-top: 1px solid var(--line); background: var(--bg); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 32px; }
+    .footer-brand { display: flex; align-items: flex-start; gap: 16px; }
+    .footer-logo { width: 40px; height: 32px; display: block; object-fit: contain; }
+    .footer-copy { display: grid; gap: 8px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .footer-links { display: flex; align-items: flex-start; gap: 24px; color: var(--muted); font-size: 14px; }
+    .footer-links a { text-decoration: none; }
+    .footer-links a:hover { color: var(--ink); }
 
     [data-copy] { display: none; }
     body[data-lang="ko"] [data-copy="ko"], body[data-lang="en"] [data-copy="en"] { display: revert; }
 
-    @media (max-width: 1040px) {
-      .app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 768px) {
+      .nav-right { gap: 16px; }
+      .nav-main-link { display: none; }
+      .brand-name { display: none; }
+      .hero { min-height: 0; padding: 64px 0; }
+      .hero-grid, .showcase-layout { grid-template-columns: 1fr; gap: 48px; }
+      .hero-media { order: 2; }
+      .hero-phone { width: min(72vw, 320px); }
+      .section { padding: 64px 0; }
+      .section-head, .app-grid, .principles { grid-template-columns: 1fr; }
+      .section-head { gap: 24px; margin-bottom: 32px; }
+      .subsection-head { margin-top: 48px; }
+      .showcase-gallery { grid-template-columns: 1fr; gap: 24px; }
+      .about-intro { margin-bottom: 32px; }
+      .principles { gap: 32px; }
+      .contact { padding: 64px 0; }
+      .contact-card { padding: 48px 24px; }
+      .footer-inner { flex-direction: column; gap: 24px; }
     }
 
-    @media (max-width: 820px) {
-      .nav-right { gap: 10px; }
-      .hero { padding: 64px 0 78px; }
-      .hero-grid { grid-template-columns: 1fr; gap: 58px; }
-      .hero-mark { min-height: 440px; }
-      .section { padding: 78px 0; }
-      .section-head, .app-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
-      .section-intro { justify-self: start; }
-      .showcase-head { grid-template-columns: 1fr; gap: 26px; }
-      .showcase-head .store-link { justify-self: start; }
-      .about-grid { gap: 48px; }
-      .contact-grid { align-items: start; }
-      .contact-actions { justify-content: flex-start; }
-    }
-
-    @media (max-width: 520px) {
-      .wrap { width: min(calc(100% - 28px), var(--max)); }
-      .nav { height: 62px; }
-      .brand span:last-child { display: none; }
-      .hero { padding: 46px 0 54px; }
-      .hero-grid { gap: 34px; }
-      h1, body[data-lang="ko"] h1 { font-size: 38px; }
-      .eyebrow { margin-bottom: 18px; }
-      .hero-copy { font-size: 15px; }
-      .actions { margin-top: 26px; }
-      .hero-mark { min-height: 300px; margin-top: -6px; }
-      .hero-mark::before { width: 280px; }
-      .hero-symbol { width: min(78vw, 300px); }
-      .section { padding: 58px 0; }
-      .section-head { gap: 20px; margin-bottom: 30px; }
-      .app-grid { gap: 14px; }
-      .app-card { min-height: 0; padding: 24px; }
-      .app-card h3 { font-size: 25px; }
-      .card-foot { margin-top: 24px; padding-top: 0; }
-      .showcase-shell { padding: 22px; border-radius: 24px; }
-      .showcase-overview { margin-top: 30px; border-radius: 15px; }
-      .showcase-gallery { gap: 10px; }
-      .showcase-shot { border-radius: 14px; }
-      .showcase-shot figcaption { padding: 10px 10px 11px; font-size: 12px; }
-      .about-grid { gap: 34px; }
-      .principle { padding: 22px 0; }
-      .contact { padding: 62px 0 28px; }
-      .contact-grid { gap: 28px; }
-      footer { flex-direction: column; margin-top: 50px; }
+    @media (max-width: 480px) {
+      .wrap { width: min(calc(100% - 32px), var(--max)); }
+      .nav { height: 64px; }
+      .nav-right { gap: 8px; }
+      .lang { gap: 0; }
+      .hero { padding: 64px 0; }
+      .hero-copy { font-size: 16px; }
+      .actions, .contact-actions { align-items: stretch; flex-direction: column; }
+      .button, .email, .contact-form-link { width: 100%; }
+      .app-card { padding: 24px; }
+      .app-card.compact { padding: 24px; }
+      .card-top { gap: 8px; }
+      .status { padding-inline: 8px; font-size: 13px; }
+      .card-foot { flex-wrap: wrap; }
+      .store-link, .upcoming-label { width: 100%; justify-content: center; }
+      .meta { width: 100%; }
+      .footer-links { flex-wrap: wrap; gap: 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -240,11 +212,12 @@
   <header id="header">
     <nav class="nav wrap" aria-label="주요 메뉴">
       <a class="brand" href="#top" aria-label="Redsky Factory 홈">
-        <img class="brand-logo" src="assets/redsky-symbol.png" alt="" width="40" height="30"><span>Redsky Factory</span>
+        <img class="brand-logo" src="assets/redsky-symbol.png" alt="" width="40" height="30"><span class="brand-name">Redsky Factory</span>
       </a>
       <div class="nav-right">
-        <a class="tools-link" href="https://tools.redskyfactory.com/">Tools</a>
-        <a class="contact-link" href="/contact"><span data-copy="ko">문의</span><span data-copy="en">Contact</span></a>
+        <a class="nav-link nav-main-link" href="#apps"><span data-copy="ko">앱</span><span data-copy="en">Apps</span></a>
+        <a class="nav-link nav-main-link" href="https://tools.redskyfactory.com/">Tools</a>
+        <a class="nav-link" href="/contact"><span data-copy="ko">문의</span><span data-copy="en">Contact</span></a>
         <div class="lang" aria-label="언어 선택">
           <button type="button" data-lang-button="ko" class="active" aria-pressed="true">KO</button>
           <button type="button" data-lang-button="en" aria-pressed="false">EN</button>
@@ -264,16 +237,17 @@
           <p class="hero-copy" data-copy="en">Redsky Factory is an independent Android app studio focused on essential features. We create apps and web tools you can use whenever you need them.</p>
           <div class="actions">
             <a class="button primary" href="#apps"><span data-copy="ko">앱 살펴보기</span><span data-copy="en">View our apps</span></a>
+            <a class="button secondary" href="/contact"><span data-copy="ko">문의 양식 작성</span><span data-copy="en">Contact form</span></a>
           </div>
         </div>
 
-        <div class="hero-mark" aria-label="Redsky Factory 로고">
-          <img class="hero-symbol" src="assets/redsky-symbol.png" alt="Redsky Factory" width="960" height="650">
+        <div class="hero-media" aria-label="MelodyWave 실제 화면">
+          <img class="hero-phone" src="assets/melodywave/player.webp" alt="MelodyWave player screen" width="720" height="1556">
         </div>
       </div>
     </section>
 
-    <section class="section" id="apps">
+    <section class="section section-soft" id="apps">
       <div class="wrap">
         <div class="section-head">
           <div><p class="kicker">Apps</p><h2 data-copy="ko">Redsky Factory의 앱</h2><h2 data-copy="en">Our apps</h2></div>
@@ -295,16 +269,19 @@
             <p class="app-desc" data-copy="en">An Android gallery app for browsing and organizing photos stored on your phone.</p>
             <div class="card-foot"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.onepic.gallery" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a><span class="meta">Android</span></div>
           </article>
+        </div>
 
-          <article class="app-card">
+        <div class="subsection-head"><h3 data-copy="ko">준비 중인 프로젝트</h3><h3 data-copy="en">Projects in progress</h3></div>
+        <div class="app-grid">
+          <article class="app-card compact">
             <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/frameon-icon.svg" alt="FrameOn 앱 아이콘" width="52" height="52"><div><h3>FrameOn</h3><span class="app-type"><span data-copy="ko">로컬 동영상 플레이어</span><span data-copy="en">Local video player</span></span></div></div><span class="status upcoming"><span data-copy="ko">준비 중</span><span data-copy="en">In progress</span></span></div>
             <p class="app-desc" data-copy="ko">기기에 저장된 동영상을 폴더별로 찾아 재생할 수 있는 Android 동영상 플레이어입니다.</p>
             <p class="app-desc" data-copy="en">An Android video player for browsing and playing videos stored on your device by folder.</p>
             <div class="card-foot"><span class="upcoming-label"><span data-copy="ko">준비 중</span><span data-copy="en">In progress</span></span><span class="meta">Android</span></div>
           </article>
 
-          <article class="app-card">
-            <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/saidatalk-icon.svg" alt="사이다톡 앱 아이콘" width="52" height="52"><div><h3><span data-copy="ko">사이다톡</span><span data-copy="en">SaidaTalk</span></h3><span class="app-type"><span data-copy="ko">메신저 앱</span><span data-copy="en">Messaging app</span></span></div></div><span class="status upcoming"><span data-copy="ko">미출시</span><span data-copy="en">Not released</span></span></div>
+          <article class="app-card compact">
+            <div class="card-top"><div class="card-identity"><img class="app-icon" src="assets/saidatalk-icon.svg" alt="사이다톡 앱 아이콘" width="52" height="52"><div><h3><span data-copy="ko">사이다톡</span><span data-copy="en">SaidaTalk</span></h3><span class="app-type"><span data-copy="ko">메신저 앱</span><span data-copy="en">Messaging app</span></span></div></div><span class="status not-released"><span data-copy="ko">미출시</span><span data-copy="en">Not released</span></span></div>
             <p class="app-desc" data-copy="ko">상용 서비스 수준의 보안 시스템을 구축할 수 없어 정식 출시 없이 개인 프로젝트로 남깁니다.</p>
             <p class="app-desc" data-copy="en">Because we cannot build the security infrastructure required for a commercial service, SaidaTalk will remain a personal project rather than being released publicly.</p>
             <div class="card-foot"><span class="upcoming-label"><span data-copy="ko">개인 프로젝트</span><span data-copy="en">Personal project</span></span><span class="meta">Android</span></div>
@@ -313,23 +290,18 @@
       </div>
     </section>
 
-    <section class="section melody-showcase" id="melodywave">
+    <!-- OnePic can reuse .showcase-layout, .showcase-gallery, and .showcase-shot when screenshots are ready. -->
+    <section class="section" id="melodywave">
       <div class="wrap">
-        <div class="showcase-shell">
-          <div class="showcase-head">
-            <div>
-              <p class="kicker">MelodyWave</p>
-              <h2 data-copy="ko">실제 화면으로 만나보세요.</h2>
-              <h2 data-copy="en">See MelodyWave in action.</h2>
-              <p class="showcase-copy" data-copy="ko">음악을 찾고 재생하는 순간부터 넓은 화면에서 사용하는 모습까지, MelodyWave의 실제 사용 화면을 담았습니다.</p>
-              <p class="showcase-copy" data-copy="en">Take a closer look at browsing, playback, and the MelodyWave experience across different screen sizes.</p>
-            </div>
-            <a class="store-link" href="https://play.google.com/store/apps/details?id=com.redskyfactory.musicplayer" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a>
+        <div class="showcase-layout">
+          <div>
+            <p class="kicker">MelodyWave</p>
+            <h2 data-copy="ko">실제 화면으로 만나보세요.</h2>
+            <h2 data-copy="en">See MelodyWave in action.</h2>
+            <p class="showcase-copy" data-copy="ko">음악을 찾고 재생하는 순간부터 넓은 화면에서 사용하는 모습까지, MelodyWave의 실제 사용 화면을 담았습니다.</p>
+            <p class="showcase-copy" data-copy="en">Take a closer look at browsing, playback, and the MelodyWave experience across different screen sizes.</p>
+            <div class="showcase-actions"><a class="store-link" href="https://play.google.com/store/apps/details?id=com.redskyfactory.musicplayer" target="_blank" rel="noopener noreferrer"><span data-copy="ko">Google Play에서 보기</span><span data-copy="en">View on Google Play</span></a></div>
           </div>
-
-          <figure class="showcase-overview">
-            <img src="assets/melodywave/overview.webp" alt="MelodyWave app overview" width="1024" height="500" loading="lazy">
-          </figure>
 
           <div class="showcase-gallery">
             <figure class="showcase-shot">
@@ -340,7 +312,7 @@
               <img src="assets/melodywave/library.webp" alt="MelodyWave music library screen" width="720" height="1567" loading="lazy">
               <figcaption><span data-copy="ko">곡과 폴더를 한눈에</span><span data-copy="en">Songs and folders at a glance</span></figcaption>
             </figure>
-            <figure class="showcase-shot wide">
+            <figure class="showcase-shot">
               <img src="assets/melodywave/landscape.webp" alt="MelodyWave landscape screen" width="1400" height="667" loading="lazy">
               <figcaption><span data-copy="ko">넓은 화면에서도 자연스럽게</span><span data-copy="en">Designed for larger screens</span></figcaption>
             </figure>
@@ -350,8 +322,8 @@
     </section>
 
     <section class="section" id="studio">
-      <div class="about-grid wrap">
-        <div>
+      <div class="wrap">
+        <div class="about-intro">
           <p class="kicker">Studio</p>
           <h2 data-copy="ko">필요한 기능에 집중합니다.</h2>
           <h2 data-copy="en">Focused on what matters.</h2>
@@ -359,9 +331,9 @@
           <p class="about-copy" data-copy="en">Redsky Factory is an independent Android app studio. Instead of adding features for the sake of it, we keep each experience simple and improve it through ongoing updates.</p>
         </div>
         <div class="principles">
-          <div class="principle"><b>01</b><div><h3 data-copy="ko">분명한 목적</h3><h3 data-copy="en">A clear purpose</h3><p data-copy="ko">앱의 핵심 용도를 분명히 하고, 실제 사용에 필요한 기능에 집중합니다.</p><p data-copy="en">We give each app a clear purpose and focus on the features people need in everyday use.</p></div></div>
-          <div class="principle"><b>02</b><div><h3 data-copy="ko">간결한 사용 경험</h3><h3 data-copy="en">A simple experience</h3><p data-copy="ko">복잡한 설정을 줄이고, 원하는 기능을 쉽게 찾고 사용할 수 있도록 만듭니다.</p><p data-copy="en">We reduce unnecessary complexity so the features you need are easy to find and use.</p></div></div>
-          <div class="principle"><b>03</b><div><h3 data-copy="ko">꾸준한 개선</h3><h3 data-copy="en">Continuous improvement</h3><p data-copy="ko">버그 제보와 사용자 의견을 바탕으로 출시 후에도 앱을 계속 개선합니다.</p><p data-copy="en">We continue improving our apps after launch, guided by bug reports and user feedback.</p></div></div>
+          <div class="principle"><b>01</b><h3 data-copy="ko">분명한 목적</h3><h3 data-copy="en">A clear purpose</h3><p data-copy="ko">앱의 핵심 용도를 분명히 하고, 실제 사용에 필요한 기능에 집중합니다.</p><p data-copy="en">We give each app a clear purpose and focus on the features people need in everyday use.</p></div>
+          <div class="principle"><b>02</b><h3 data-copy="ko">간결한 사용 경험</h3><h3 data-copy="en">A simple experience</h3><p data-copy="ko">복잡한 설정을 줄이고, 원하는 기능을 쉽게 찾고 사용할 수 있도록 만듭니다.</p><p data-copy="en">We reduce unnecessary complexity so the features you need are easy to find and use.</p></div>
+          <div class="principle"><b>03</b><h3 data-copy="ko">꾸준한 개선</h3><h3 data-copy="en">Continuous improvement</h3><p data-copy="ko">버그 제보와 사용자 의견을 바탕으로 출시 후에도 앱을 계속 개선합니다.</p><p data-copy="en">We continue improving our apps after launch, guided by bug reports and user feedback.</p></div>
         </div>
       </div>
     </section>
@@ -369,16 +341,29 @@
 
   <section class="contact" id="contact">
     <div class="wrap">
-      <div class="contact-grid">
-        <div><p class="kicker">Contact</p><h2 data-copy="ko">문의와 의견을 보내주세요.</h2><h2 data-copy="en">Questions or feedback?</h2><p data-copy="ko">버그를 제보할 때는 앱 이름, 기기 모델, Android 버전과 문제가 발생한 상황을 함께 알려주세요.</p><p data-copy="en">For bug reports, please include the app name, device model, Android version, and a brief description of what happened.</p></div>
+      <div class="contact-card">
+        <p class="kicker">Contact</p>
+        <h2 data-copy="ko">문의와 의견을 보내주세요.</h2>
+        <h2 data-copy="en">Questions or feedback?</h2>
+        <p data-copy="ko">버그를 제보할 때는 앱 이름, 기기 모델, Android 버전과 문제가 발생한 상황을 함께 알려주세요.</p>
+        <p data-copy="en">For bug reports, please include the app name, device model, Android version, and a brief description of what happened.</p>
         <div class="contact-actions">
           <a class="contact-form-link" href="/contact"><span data-copy="ko">문의 양식 작성</span><span data-copy="en">Contact form</span></a>
           <!--email_off--><a class="email" href="mailto:contact@redskyfactory.com" draggable="false">contact@redskyfactory.com</a><!--/email_off-->
         </div>
       </div>
-      <footer><span>© 2026 Redsky Factory</span><span data-copy="ko">Redsky Factory는 독립 Android 앱 스튜디오입니다.</span><span data-copy="en">Redsky Factory is an independent Android app studio.</span></footer>
     </div>
   </section>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img class="footer-logo" src="assets/redsky-symbol.png" alt="" width="40" height="32">
+        <div class="footer-copy"><span data-copy="ko">Redsky Factory는 독립 Android 앱 스튜디오입니다.</span><span data-copy="en">Redsky Factory is an independent Android app studio.</span><span>© 2026 Redsky Factory</span></div>
+      </div>
+      <div class="footer-links"><a href="/contact"><span data-copy="ko">문의</span><span data-copy="en">Contact</span></a><!--email_off--><a href="mailto:contact@redskyfactory.com" draggable="false">contact@redskyfactory.com</a><!--/email_off--></div>
+    </div>
+  </footer>
 
   <script>
     (() => {
